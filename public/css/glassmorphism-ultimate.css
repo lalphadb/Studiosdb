@@ -1,0 +1,529 @@
+/* ===================================
+   STUDIOS UNIS - GLASSMORPHISM APAISÉ
+   Élégant sans fatigue visuelle
+   =================================== */
+
+:root {
+    /* Couleurs apaisées */
+    --glass-primary: rgba(45, 55, 75, 0.95);
+    --glass-secondary: rgba(55, 65, 85, 0.9);
+    --glass-accent: rgba(100, 149, 237, 0.8);
+    --glass-highlight: rgba(147, 112, 219, 0.7);
+    --glass-success: rgba(72, 187, 120, 0.8);
+    --glass-warning: rgba(237, 137, 54, 0.8);
+    --glass-danger: rgba(229, 62, 62, 0.8);
+    
+    /* Effets glass doux */
+    --glass-blur: 20px;
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.25);
+    
+    /* Transitions douces */
+    --transition-smooth: all 0.3s ease;
+    --transition-gentle: all 0.4s ease-out;
+}
+
+/* === BODY & LAYOUT APAISÉ === */
+body {
+    background: linear-gradient(135deg, 
+        #2c3e50 0%,    /* Gris-bleu foncé */
+        #34495e 25%,   /* Gris anthracite */
+        #4a5568 50%,   /* Gris moyen */
+        #2d3748 75%,   /* Gris-bleu */
+        #1a202c 100%   /* Gris très foncé */
+    ) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+    color: white;
+}
+
+/* Suppression de l'animation du background */
+/* Plus d'animation gradientShift */
+
+/* Particules statiques très subtiles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(100, 149, 237, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(147, 112, 219, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    /* Pas d'animation */
+}
+
+/* === SIDEBAR GLASSMORPHISM CALME === */
+.studios-sidebar {
+    width: 280px;
+    background: var(--glass-primary);
+    backdrop-filter: blur(var(--glass-blur));
+    border-right: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+/* Suppression de l'effet shimmer */
+.studios-sidebar::before {
+    display: none;
+}
+
+/* === BRAND SECTION SIMPLE === */
+.studios-brand {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    background: linear-gradient(135deg, 
+        rgba(100, 149, 237, 0.08) 0%, 
+        rgba(147, 112, 219, 0.05) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.brand-logo {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--glass-accent), var(--glass-highlight));
+    border-radius: 16px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+    box-shadow: 0 8px 25px rgba(100, 149, 237, 0.2);
+    transition: var(--transition-gentle);
+    /* Suppression de l'animation pulse */
+}
+
+.brand-logo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(100, 149, 237, 0.3);
+    /* Pas de rotation */
+}
+
+.brand-title {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+}
+
+/* === USER PANEL SOBRE === */
+.studios-user-panel {
+    padding: 1.5rem;
+    margin: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: var(--transition-gentle);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Suppression de l'effet rotating */
+.studios-user-panel::before {
+    display: none;
+}
+
+.studios-user-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--glass-accent), var(--glass-highlight));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: white;
+    margin-right: 1rem;
+    box-shadow: 0 6px 20px rgba(100, 149, 237, 0.2);
+    transition: var(--transition-gentle);
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    /* Pas de rotation */
+}
+
+.user-name {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.user-role {
+    color: var(--glass-accent);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+/* === NAVIGATION CALME === */
+.studios-nav {
+    padding: 1rem 0 2rem;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin: 0.4rem 1rem;
+    position: relative;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    border: 1px solid transparent;
+}
+
+/* Effet de slide doux */
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.05), 
+        transparent);
+    transition: left 0.4s ease;
+}
+
+.nav-link:hover::before {
+    left: 100%;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, var(--glass-accent), var(--glass-highlight));
+    color: white;
+    transform: translateX(6px);
+    box-shadow: 0 8px 25px rgba(100, 149, 237, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link i {
+    margin-right: 0.75rem;
+    width: 1.4rem;
+    text-align: center;
+    font-size: 1rem;
+    transition: var(--transition-smooth);
+}
+
+.nav-link:hover i {
+    transform: scale(1.05);
+    /* Pas de rotation */
+}
+
+.nav-link.active i {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+/* Badge simple */
+.nav-badge {
+    background: linear-gradient(135deg, var(--glass-danger), #ff6b6b);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    margin-left: auto;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(229, 62, 62, 0.3);
+    /* Suppression de l'animation bounce */
+}
+
+/* === BOUTON DÉCONNEXION SOBRE === */
+.logout-btn {
+    width: calc(100% - 2rem);
+    background: linear-gradient(135deg, var(--glass-danger), #e53e3e);
+    color: white;
+    border-radius: 12px;
+    padding: 0.9rem;
+    margin: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-gentle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(229, 62, 62, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.logout-btn:hover::before {
+    left: 100%;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(229, 62, 62, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
+
+/* === MAIN CONTENT === */
+.studios-main {
+    margin-left: 280px;
+    min-height: 100vh;
+    transition: var(--transition-smooth);
+    width: calc(100vw - 280px);
+    max-width: calc(100vw - 280px);
+    overflow-x: hidden;
+}
+
+.studios-header {
+    background: var(--glass-primary);
+    backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--glass-shadow);
+    position: relative;
+}
+
+.studios-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.page-title i {
+    margin-right: 0.75rem;
+    color: var(--glass-accent);
+    filter: drop-shadow(0 0 6px rgba(100, 149, 237, 0.3));
+}
+
+.header-info {
+    text-align: right;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.header-date {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.header-time {
+    font-size: 0.8rem;
+    color: var(--glass-accent);
+}
+
+/* === CONTENT AREA === */
+.studios-content {
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.02);
+    min-height: calc(100vh - 100px);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* === WELCOME SECTION APAISÉE === */
+.welcome-hero {
+    background: linear-gradient(135deg, 
+        rgba(100, 149, 237, 0.1) 0%, 
+        rgba(147, 112, 219, 0.08) 50%,
+        rgba(72, 187, 120, 0.06) 100%);
+    backdrop-filter: blur(var(--glass-blur));
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-gentle);
+}
+
+/* Suppression de l'effet rotating */
+.welcome-hero::before {
+    display: none;
+}
+
+.welcome-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--glass-shadow-hover);
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 2;
+}
+
+.welcome-title {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+.welcome-date-section {
+    text-align: right;
+    position: relative;
+    z-index: 2;
+}
+
+.date-display {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.date-info {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin-top: 0.3rem;
+}
+
+.time-info {
+    color: var(--glass-accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .studios-sidebar {
+        transform: translateX(-280px);
+        transition: transform 0.3s ease;
+    }
+    
+    .studios-sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .studios-main {
+        margin-left: 0;
+        width: 100vw;
+    }
+    
+    .studios-content {
+        padding: 1rem;
+    }
+    
+    .welcome-hero {
+        padding: 1.5rem;
+    }
+    
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.8rem;
+    }
+    
+    .date-display {
+        font-size: 2.8rem;
+    }
+}
+
+/* === CORRECTIONS OVERFLOW === */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+}
+
+.studios-wrapper {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
