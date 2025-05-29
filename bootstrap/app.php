@@ -11,7 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Redirection pour les invités et utilisateurs authentifiés
+        $middleware->redirectGuestsTo('/login');
+        $middleware->redirectUsersTo('/admin/dashboard');
+        
+        // Enregistrement des middlewares personnalisés
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
+        
+        // Rate limiting
+        $middleware->throttleApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

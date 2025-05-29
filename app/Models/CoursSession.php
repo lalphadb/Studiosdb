@@ -32,9 +32,10 @@ class CoursSession extends Model
         'inscriptions_actives' => 'boolean',
         'visible' => 'boolean',
         'active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    // Relations
     public function ecole()
     {
         return $this->belongsTo(Ecole::class);
@@ -45,38 +46,8 @@ class CoursSession extends Model
         return $this->hasMany(Cours::class, 'session_id');
     }
 
-    public function inscriptions()
-    {
-        return $this->hasMany(InscriptionCours::class, 'session_id');
-    }
-
-    // Scopes
     public function scopeActive($query)
     {
         return $query->where('active', true);
-    }
-
-    public function scopeVisible($query)
-    {
-        return $query->where('visible', true);
-    }
-
-    // Méthodes utilitaires
-    public function getTotalInscriptionsAttribute()
-    {
-        return $this->inscriptions()->where('statut', 'confirmee')->count();
-    }
-
-    public function getStatutInscriptionsAttribute()
-    {
-        if (!$this->inscriptions_actives) {
-            return 'Fermées';
-        }
-        
-        if ($this->date_limite_inscription && $this->date_limite_inscription < now()) {
-            return 'Expirées';
-        }
-        
-        return 'Ouvertes';
     }
 }

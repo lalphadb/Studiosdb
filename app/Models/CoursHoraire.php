@@ -9,6 +9,8 @@ class CoursHoraire extends Model
 {
     use HasFactory;
 
+    protected $table = 'cours_horaires';
+
     protected $fillable = [
         'cours_id',
         'jour',
@@ -20,9 +22,9 @@ class CoursHoraire extends Model
     ];
 
     protected $casts = [
-        'heure_debut' => 'datetime:H:i',
-        'heure_fin' => 'datetime:H:i',
         'active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function cours()
@@ -35,18 +37,8 @@ class CoursHoraire extends Model
         return $query->where('active', true);
     }
 
-    public function getJourFrancaisAttribute()
+    public function scopeByJour($query, $jour)
     {
-        $jours = [
-            'lundi' => 'Lundi',
-            'mardi' => 'Mardi', 
-            'mercredi' => 'Mercredi',
-            'jeudi' => 'Jeudi',
-            'vendredi' => 'Vendredi',
-            'samedi' => 'Samedi',
-            'dimanche' => 'Dimanche',
-        ];
-
-        return $jours[$this->jour] ?? $this->jour;
+        return $query->where('jour', $jour);
     }
 }

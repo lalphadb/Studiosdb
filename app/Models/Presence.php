@@ -9,9 +9,11 @@ class Presence extends Model
 {
     use HasFactory;
 
+    protected $table = 'presences';
+
     protected $fillable = [
         'membre_id',
-        'cours_id', 
+        'cours_id',
         'date_presence',
         'status',
         'commentaire',
@@ -19,9 +21,10 @@ class Presence extends Model
 
     protected $casts = [
         'date_presence' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    // Relations
     public function membre()
     {
         return $this->belongsTo(Membre::class);
@@ -32,19 +35,19 @@ class Presence extends Model
         return $this->belongsTo(Cours::class);
     }
 
-    // Scopes
-    public function scopePresent($query)
+    public function scopeCeMois($query)
+    {
+        return $query->whereMonth('date_presence', now()->month)
+                    ->whereYear('date_presence', now()->year);
+    }
+
+    public function scopePresents($query)
     {
         return $query->where('status', 'present');
     }
 
-    public function scopeAbsent($query)
+    public function scopeAbsents($query)
     {
         return $query->where('status', 'absent');
-    }
-
-    public function scopeParDate($query, $date)
-    {
-        return $query->where('date_presence', $date);
     }
 }

@@ -1,147 +1,273 @@
 @extends('layouts.admin')
 
-@section('title', 'Membres')
-@section('page-title', 'Gestion des Membres')
+@section('title', 'Gestion des Membres')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Liste des Membres</h1>
-            <p class="text-gray-600">Gérez tous les membres des écoles</p>
-        </div>
-        <a href="{{ route('admin.membres.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
-            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            Nouveau Membre
-        </a>
-    </div>
-
-    <!-- Filtres -->
-    <div class="bg-white p-4 rounded-lg shadow">
-        <form method="GET" class="flex space-x-4">
-            <div class="flex-1">
-                <input type="text" name="search" placeholder="Rechercher un membre..." 
-                       value="{{ request('search') }}" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="row mb-4 fade-in">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-white">
+                        <i class="fas fa-users me-2 text-primary"></i>Gestion des Membres
+                    </h1>
+                    <p class="text-light opacity-75 mb-0">Gérez les membres de votre école de karaté</p>
+                </div>
+                <a href="{{ route('admin.membres.create') }}" class="btn btn-glass-ultimate">
+                    <i class="fas fa-plus me-2"></i>Nouveau Membre
+                </a>
             </div>
-            
-            <select name="statut" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="tous">Tous les statuts</option>
-                <option value="approuves" {{ request('statut') === 'approuves' ? 'selected' : '' }}>Approuvés</option>
-                <option value="en_attente" {{ request('statut') === 'en_attente' ? 'selected' : '' }}>En attente</option>
-            </select>
-            
-            @if(auth()->user()->role === 'superadmin' && isset($ecoles))
-            <select name="ecole_id" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="all">Toutes les écoles</option>
-                @foreach($ecoles as $ecole)
-                <option value="{{ $ecole->id }}" {{ request('ecole_id') == $ecole->id ? 'selected' : '' }}>
-                    {{ $ecole->nom }}
-                </option>
-                @endforeach
-            </select>
-            @endif
-            
-            <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200">
-                Filtrer
-            </button>
-        </form>
+        </div>
     </div>
 
-    <!-- Liste des membres -->
-    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-        @if(isset($membres) && $membres->count() > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-md-3 slide-up" style="animation-delay: 0.1s">
+            <div class="stat-card-ultimate">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle-ultimate bg-primary me-3">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 text-white">{{ $membres->total() ?? 0 }}</h3>
+                            <p class="text-light opacity-75 mb-0">Total Membres</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 slide-up" style="animation-delay: 0.2s">
+            <div class="stat-card-ultimate">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle-ultimate bg-success me-3">
+                            <i class="fas fa-check-circle text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 text-white">{{ $membres->where('approuve', true)->count() }}</h3>
+                            <p class="text-light opacity-75 mb-0">Approuvés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 slide-up" style="animation-delay: 0.3s">
+            <div class="stat-card-ultimate">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle-ultimate bg-warning me-3">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 text-white">{{ $membres->where('approuve', false)->count() }}</h3>
+                            <p class="text-light opacity-75 mb-0">En attente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 slide-up" style="animation-delay: 0.4s">
+            <div class="stat-card-ultimate">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle-ultimate bg-info me-3">
+                            <i class="fas fa-user-plus text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 text-white">{{ $membres->where('created_at', '>=', now()->startOfMonth())->count() }}</h3>
+                            <p class="text-light opacity-75 mb-0">Ce mois</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres et Recherche -->
+    <div class="content-section-ultimate mb-4 slide-up" style="animation-delay: 0.5s">
+        <div class="card-body p-4">
+            <h5 class="text-white mb-3">
+                <i class="fas fa-filter me-2"></i>Filtres et Recherche
+            </h5>
+            <form method="GET" action="{{ route('admin.membres.index') }}">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label text-light">Rechercher</label>
+                        <div class="input-group">
+                            <input type="text" id="search" name="search" 
+                                   class="form-control-glass" 
+                                   placeholder="Nom, prénom, email..."
+                                   value="{{ request('search') }}">
+                            <span class="input-group-text bg-transparent border-0">
+                                <i class="fas fa-search text-light"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="ecole" class="form-label text-light">École</label>
+                        <select id="ecole" name="ecole" class="form-control-glass">
+                            <option value="">Toutes les écoles</option>
+                            @foreach($ecoles as $ecole)
+                                <option value="{{ $ecole->id }}" {{ request('ecole') == $ecole->id ? 'selected' : '' }}>
+                                    {{ $ecole->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="statut" class="form-label text-light">Statut</label>
+                        <select id="statut" name="statut" class="form-control-glass">
+                            <option value="">Tous les statuts</option>
+                            <option value="1" {{ request('statut') === '1' ? 'selected' : '' }}>Approuvés</option>
+                            <option value="0" {{ request('statut') === '0' ? 'selected' : '' }}>En attente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label text-light">&nbsp;</label>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-glass-ultimate flex-fill">
+                                <i class="fas fa-search me-1"></i>Filtrer
+                            </button>
+                            <a href="{{ route('admin.membres.index') }}" class="btn btn-glass">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des Membres -->
+    <div class="content-section-ultimate slide-up" style="animation-delay: 0.6s">
+        <div class="card-body p-0">
+            @if($membres->count() > 0)
+            <div class="table-responsive">
+                <table class="table table-glass-ultimate mb-0">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Membre</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">École</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th>Membre</th>
+                            <th>Contact</th>
+                            <th>École</th>
+                            <th>Statut</th>
+                            <th>Inscription</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody>
                         @foreach($membres as $membre)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                                            <span class="text-sm font-medium text-gray-700">
-                                                {{ substr($membre->prenom, 0, 1) }}{{ substr($membre->nom, 0, 1) }}
-                                            </span>
-                                        </div>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-glass-ultimate me-3">
+                                        {{ strtoupper(substr($membre->prenom ?? 'N', 0, 1) . substr($membre->nom ?? 'A', 0, 1)) }}
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $membre->full_name }}</div>
+                                    <div>
+                                        <h6 class="mb-0 text-white">{{ $membre->prenom }} {{ $membre->nom }}</h6>
                                         @if($membre->date_naissance)
-                                        <div class="text-sm text-gray-500">{{ $membre->age }} ans</div>
+                                            <small class="text-light opacity-75">{{ $membre->age }} ans</small>
+                                        @else
+                                            <small class="text-light opacity-75">Âge non renseigné</small>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $membre->ecole->nom ?? 'Non assigné' }}
+                            <td>
+                                <div class="contact-info">
+                                    @if($membre->email)
+                                        <div class="contact-info-item">
+                                            <i class="fas fa-envelope"></i>
+                                            {{ $membre->email }}
+                                        </div>
+                                    @endif
+                                    @if($membre->telephone)
+                                        <div class="contact-info-item">
+                                            <i class="fas fa-phone"></i>
+                                            {{ $membre->telephone }}
+                                        </div>
+                                    @endif
+                                    @if(!$membre->email && !$membre->telephone)
+                                        <span class="text-light opacity-50">Non renseigné</span>
+                                    @endif
+                                </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                @if($membre->email)
-                                <div>{{ $membre->email }}</div>
-                                @endif
-                                @if($membre->telephone)
-                                <div>{{ $membre->telephone }}</div>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if($membre->approuve)
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Approuvé
-                                </span>
+                            <td>
+                                @if($membre->ecole)
+                                    <span class="badge-glass-ultimate">
+                                        {{ $membre->ecole->nom }}
+                                    </span>
                                 @else
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    En attente
-                                </span>
+                                    <span class="text-light opacity-50">Aucune école</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <a href="{{ route('admin.membres.show', $membre) }}" class="text-indigo-600 hover:text-indigo-900">Voir</a>
-                                <a href="{{ route('admin.membres.edit', $membre) }}" class="text-blue-600 hover:text-blue-900">Modifier</a>
-                                @if(!$membre->approuve)
-                                <form method="POST" action="{{ route('admin.membres.approve', $membre) }}" class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="text-green-600 hover:text-green-900">Approuver</button>
-                                </form>
+                            <td>
+                                @if($membre->approuve)
+                                    <span class="badge-glass-ultimate badge-status-approved">
+                                        <i class="fas fa-check-circle me-1"></i>Approuvé
+                                    </span>
+                                @else
+                                    <span class="badge-glass-ultimate badge-status-pending">
+                                        <i class="fas fa-clock me-1"></i>En attente
+                                    </span>
                                 @endif
+                            </td>
+                            <td>
+                                <span class="text-light opacity-75">
+                                    {{ $membre->created_at->format('d/m/Y') }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-glass" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-glass" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    @if(!$membre->approuve)
+                                    <button class="btn btn-sm btn-glass-success" title="Approuver">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    @endif
+                                    <button class="btn btn-sm btn-glass-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-
+            
             <!-- Pagination -->
-            @if(method_exists($membres, 'links'))
-            <div class="px-6 py-3 bg-gray-50">
-                {{ $membres->links() }}
+            @if($membres->hasPages())
+            <div class="d-flex justify-content-between align-items-center p-4 border-top border-light border-opacity-10">
+                <div class="text-light opacity-75">
+                    Affichage de {{ $membres->firstItem() }} à {{ $membres->lastItem() }} 
+                    sur {{ $membres->total() }} membres
+                </div>
+                <div class="pagination-glass">
+                    {{ $membres->links() }}
+                </div>
             </div>
             @endif
-        @else
-            <div class="text-center py-12">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-                <h3 class="mt-4 text-lg font-medium text-gray-900">Aucun membre</h3>
-                <p class="mt-2 text-gray-500">Commencez par ajouter votre premier membre.</p>
-                <a href="{{ route('admin.membres.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Ajouter un membre
+            @else
+            <div class="empty-state-glass">
+                <i class="fas fa-users"></i>
+                <h4>Aucun membre trouvé</h4>
+                <p>Commencez par ajouter votre premier membre à l'école.</p>
+                <a href="{{ route('admin.membres.create') }}" class="btn btn-glass-ultimate btn-lg">
+                    <i class="fas fa-plus me-2"></i>Ajouter le premier membre
                 </a>
             </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>
 @endsection

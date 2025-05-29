@@ -9,28 +9,20 @@ class Cours extends Model
 {
     use HasFactory;
 
-    protected $table = 'cours';
-
     protected $fillable = [
-        'nom',
-        'description', 
-        'date_debut',
-        'date_fin',
-        'places_max',
-        'ecole_id',
-        'session_id',
-        'instructeur',
-        'niveau',
-        'tarif',
-        'statut',
+        'nom', 'description', 'jours', 'date_debut', 'date_fin', 
+        'places_max', 'ecole_id', 'session_id', 'instructeur', 
+        'niveau', 'tarif', 'statut'
     ];
 
     protected $casts = [
+        'jours' => 'array',
         'date_debut' => 'date',
         'date_fin' => 'date',
-        'tarif' => 'decimal:2',
+        'tarif' => 'decimal:2'
     ];
 
+    // ✅ RELATIONS
     public function ecole()
     {
         return $this->belongsTo(Ecole::class);
@@ -46,9 +38,11 @@ class Cours extends Model
         return $this->hasMany(CoursHoraire::class);
     }
 
-    public function inscriptions()
+    public function membres()
     {
-        return $this->hasMany(InscriptionCours::class);
+        return $this->belongsToMany(Membre::class, 'inscription_cours')
+                    ->withPivot(['statut', 'date_inscription', 'montant_paye', 'notes'])
+                    ->withTimestamps();
     }
 
     public function presences()
@@ -56,13 +50,9 @@ class Cours extends Model
         return $this->hasMany(Presence::class);
     }
 
-    public function scopeActif($query)
+    // ✅ SCOPES
+    public function scopeActifs($query)
     {
         return $query->where('statut', 'actif');
-    }
-
-    public function getPlacesRestantesAttribute()
-    {
-        return $this->places_max - $this->inscriptions()->where('statut', 'confirmee')->count();
     }
 }

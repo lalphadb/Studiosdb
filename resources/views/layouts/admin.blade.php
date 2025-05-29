@@ -6,23 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- NOS NOUVEAUX CSS GLASSMORPHISM -->
-    <link rel="stylesheet" href="{{ asset('css/glassmorphism-ultimate.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/cards-ultimate.css') }}">
-    
+    <!-- VOS CSS AVEC TIMESTAMP POUR FORCER LE RECHARGEMENT -->
+     <link rel="stylesheet" href="{{ asset('css/studios-theme-unified.css') }}?v={{ time() }}">    
     @stack('styles')
 </head>
 <body>
     <div class="studios-wrapper">
         
-        <!-- Sidebar Glassmorphism -->
-        <div class="studios-sidebar" id="sidebar">
-            <!-- Brand/Logo -->
+        <!-- Sidebar Moderne -->
+        <aside class="studios-sidebar" id="sidebar">
+            <!-- Brand -->
             <div class="studios-brand">
                 <div class="brand-logo">
                     <i class="fas fa-fist-raised"></i>
@@ -30,60 +31,72 @@
                 <h2 class="brand-title">Studios Unis</h2>
             </div>
             
-            <!-- User Panel -->
+            <!-- Profile utilisateur -->
             <div class="studios-user-panel">
                 <div class="user-avatar">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="user-info">
                     <div class="user-name">{{ auth()->user()->name }}</div>
-                    <div class="user-role">{{ auth()->user()->role }}</div>
+                    <div class="user-role">{{ ucfirst(auth()->user()->role) }}</div>
                 </div>
             </div>
             
-            <!-- Navigation Menu -->
+            <!-- Navigation -->
             <nav class="studios-nav">
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Tableau de bord</span>
                         </a>
                     </li>
+                    
                     <li class="nav-item">
                         <a href="{{ route('admin.ecoles.index') }}" class="nav-link {{ request()->routeIs('admin.ecoles.*') ? 'active' : '' }}">
                             <i class="fas fa-building"></i>
                             <span>Écoles</span>
                         </a>
                     </li>
+                    
                     <li class="nav-item">
                         <a href="{{ route('admin.membres.index') }}" class="nav-link {{ request()->routeIs('admin.membres.*') ? 'active' : '' }}">
                             <i class="fas fa-users"></i>
                             <span>Membres</span>
                             @if(($membresEnAttente ?? 0) > 0)
-                            <span class="nav-badge">{{ $membresEnAttente }}</span>
+                                <span class="nav-badge">{{ $membresEnAttente }}</span>
                             @endif
                         </a>
                     </li>
+                    
+                    @if(Route::has('admin.sessions.index'))
                     <li class="nav-item">
                         <a href="{{ route('admin.sessions.index') }}" class="nav-link {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
                             <i class="fas fa-calendar"></i>
                             <span>Sessions</span>
                         </a>
                     </li>
+                    @endif
+                    
+                    @if(Route::has('admin.cours.index'))
                     <li class="nav-item">
                         <a href="{{ route('admin.cours.index') }}" class="nav-link {{ request()->routeIs('admin.cours.*') ? 'active' : '' }}">
                             <i class="fas fa-graduation-cap"></i>
                             <span>Cours</span>
                         </a>
                     </li>
+                    @endif
+                    
+                    @if(Route::has('admin.presences.index'))
                     <li class="nav-item">
                         <a href="{{ route('admin.presences.index') }}" class="nav-link {{ request()->routeIs('admin.presences.*') ? 'active' : '' }}">
                             <i class="fas fa-check-circle"></i>
                             <span>Présences</span>
                         </a>
                     </li>
-                    @if(auth()->user()->role === 'superadmin')
+                    @endif
+                    
+                    @if(auth()->user()->role === 'superadmin' && Route::has('admin.users.index'))
                     <li class="nav-item">
                         <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                             <i class="fas fa-user-cog"></i>
@@ -93,7 +106,7 @@
                     @endif
                 </ul>
                 
-                <!-- Logout Button -->
+                <!-- Bouton Déconnexion -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="logout-btn">
@@ -102,14 +115,14 @@
                     </button>
                 </form>
             </nav>
-        </div>
+        </aside>
         
-        <!-- Main Content -->
+        <!-- Contenu principal -->
         <div class="studios-main" id="main-content">
-            <!-- Top Header -->
+            <!-- Header moderne -->
             <div class="studios-header">
                 <div class="page-title">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-{{ request()->routeIs('admin.dashboard') ? 'chart-line' : (request()->routeIs('admin.ecoles.*') ? 'building' : (request()->routeIs('admin.membres.*') ? 'users' : 'cog')) }}"></i>
                     @yield('title', 'Dashboard')
                 </div>
                 <div class="header-info">
@@ -118,8 +131,9 @@
                 </div>
             </div>
             
-            <!-- Content Area -->
+            <!-- Zone de contenu -->
             <div class="studios-content">
+                <!-- Messages Flash -->
                 @if(session('success'))
                 <div class="alert-glass-ultimate alert-success-glass">
                     <i class="fas fa-check-circle"></i>
@@ -155,46 +169,20 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Horloge en temps réel
+    // Horloge temps réel
     function updateTime() {
         const now = new Date();
         const timeString = now.toLocaleTimeString('fr-FR');
-        document.getElementById('current-time').textContent = timeString;
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
     }
     
     setInterval(updateTime, 1000);
     
-    // Sidebar responsive
-    function toggleSidebar() {
-        document.querySelector('.studios-sidebar').classList.toggle('open');
-    }
-    
-    // Animation au chargement
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animer les éléments
-        const elements = document.querySelectorAll('.nav-item, .stat-card-ultimate');
-        elements.forEach((el, index) => {
-            el.style.animationDelay = `${index * 0.1}s`;
-        });
-    });
-    
-    // Parallax subtil sur les cartes
-    document.addEventListener('mousemove', function(e) {
-        const cards = document.querySelectorAll('.stat-card-ultimate');
-        const mouseX = e.clientX / window.innerWidth;
-        const mouseY = e.clientY / window.innerHeight;
-        
-        cards.forEach(card => {
-            const rect = card.getBoundingClientRect();
-            const cardX = (rect.left + rect.width / 2) / window.innerWidth;
-            const cardY = (rect.top + rect.height / 2) / window.innerHeight;
-            
-            const rotateX = (mouseY - cardY) * 5;
-            const rotateY = (cardX - mouseX) * 5;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-    });
+    // Debug : vérifier que les CSS sont chargés
+    console.log('Layout admin chargé avec nouveaux CSS');
     </script>
     
     @stack('scripts')
