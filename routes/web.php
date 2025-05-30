@@ -123,3 +123,55 @@ Route::middleware(['throttle:api'])->prefix('api/v1')->name('api.')->group(funct
     Route::get('ecoles/publiques', [EcoleController::class, 'publicList'])->name('ecoles.public');
     Route::get('sessions/actives', [SessionController::class, 'activeList'])->name('sessions.active');
 });
+
+// Routes Loi 25
+Route::get('/politique-confidentialite', function () {
+    return view('politique');
+})->name('privacy-policy');
+
+Route::get('/conditions-utilisation', function () {
+    return view('legal.terms');
+})->name('terms');
+
+Route::get('/avis-collecte', function () {
+    return view('legal.data-collection');
+})->name('data-collection');
+
+Route::get('/droits-acces', function () {
+    return view('legal.access-rights');
+})->name('access-rights');
+
+Route::get('/gestion-consentements', function () {
+    return view('legal.consent-management');
+})->name('consent-management');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+// Routes Footer Loi 25
+Route::get('/politique-confidentialite', function () {
+    return view('politique');
+})->name('privacy-policy');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+// Rediriger les autres routes vers la politique complète
+Route::get('/conditions-utilisation', function () {
+    return redirect()->route('privacy-policy')->with('section', 'conditions');
+})->name('terms');
+
+Route::get('/avis-collecte', function () {
+    return redirect()->route('privacy-policy')->with('section', 'collecte');
+})->name('data-collection');
+
+Route::get('/droits-acces', function () {
+    return redirect()->route('privacy-policy')->with('section', 'droits');
+})->name('access-rights');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');

@@ -1,0 +1,71 @@
+/* Sidebar Toggle Styles */
+.sidebar-toggle-btn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--glass-bg-hover);
+    transform: scale(1.05);
+}
+
+.admin-sidebar {
+    width: var(--sidebar-width);
+    transition: width 0.3s ease;
+}
+
+.admin-sidebar.collapsed {
+    width: var(--sidebar-collapsed);
+}
+
+.admin-sidebar.collapsed .sidebar-label {
+    display: none;
+}
+
+.admin-sidebar.collapsed .sidebar-item {
+    justify-content: center;
+}
+
+.admin-sidebar.collapsed .sidebar-icon {
+    margin-right: 0;
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+    }
+}

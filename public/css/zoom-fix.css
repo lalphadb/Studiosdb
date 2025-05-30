@@ -1,0 +1,84 @@
+/* PATCH ZOOM FIX - STUDIOSUNISDB */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed: 60px;
+}
+
+/* Reset box-sizing global */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Correction du container principal */
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    transition: margin-left 0.3s ease;
+    width: calc(100% - var(--sidebar-width));
+}
+
+.admin-main.sidebar-collapsed {
+    margin-left: var(--sidebar-collapsed);
+    width: calc(100% - var(--sidebar-collapsed));
+}
+
+.admin-content,
+.content-wrapper {
+    max-width: 100%;
+    padding: clamp(1rem, 2vw, 2rem);
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: min(100%, 1400px);
+    margin: 0 auto;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+/* Fix pour les tableaux */
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+/* Ajustements responsive */
+@media (max-width: 1400px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    .admin-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+}
