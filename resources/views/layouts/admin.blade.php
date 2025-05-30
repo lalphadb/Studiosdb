@@ -2,187 +2,164 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Studios Unis - Administration')</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ $pageTitle ?? 'StudiosDB' }} - Administration</title>
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Unifié -->
+    <link href="{{ asset('css/studiosdb-unified.css') }}" rel="stylesheet">
     
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- VOS CSS AVEC TIMESTAMP POUR FORCER LE RECHARGEMENT -->
-     <link rel="stylesheet" href="{{ asset('css/studios-theme-unified.css') }}?v={{ time() }}">    
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     @stack('styles')
 </head>
 <body>
-    <div class="studios-wrapper">
-        
-        <!-- Sidebar Moderne -->
-        <aside class="studios-sidebar" id="sidebar">
-            <!-- Brand -->
-            <div class="studios-brand">
-                <div class="brand-logo">
-                    <i class="fas fa-fist-raised"></i>
-                </div>
-                <h2 class="brand-title">Studios Unis</h2>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">StudiosDB</h1>
+                <p class="sidebar-subtitle">Administration</p>
             </div>
             
-            <!-- Profile utilisateur -->
-            <div class="studios-user-panel">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                    <div class="user-name">{{ auth()->user()->name }}</div>
-                    <div class="user-role">{{ ucfirst(auth()->user()->role) }}</div>
-                </div>
-            </div>
-            
-            <!-- Navigation -->
-            <nav class="studios-nav">
+            <nav class="sidebar-nav">
                 <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Tableau de bord</span>
+                    <li class="nav-item {{ request()->routeIs('admin.dashboard*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                            <i class="fas fa-home nav-icon"></i>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     
-                    <li class="nav-item">
-                        <a href="{{ route('admin.ecoles.index') }}" class="nav-link {{ request()->routeIs('admin.ecoles.*') ? 'active' : '' }}">
-                            <i class="fas fa-building"></i>
+                    <li class="nav-item {{ request()->routeIs('admin.ecoles*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.ecoles.index') }}" class="nav-link">
+                            <i class="fas fa-school nav-icon"></i>
                             <span>Écoles</span>
                         </a>
                     </li>
                     
-                    <li class="nav-item">
-                        <a href="{{ route('admin.membres.index') }}" class="nav-link {{ request()->routeIs('admin.membres.*') ? 'active' : '' }}">
-                            <i class="fas fa-users"></i>
+                    <li class="nav-item {{ request()->routeIs('admin.membres*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.membres.index') }}" class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
                             <span>Membres</span>
-                            @if(($membresEnAttente ?? 0) > 0)
-                                <span class="nav-badge">{{ $membresEnAttente }}</span>
-                            @endif
                         </a>
                     </li>
                     
-                    @if(Route::has('admin.sessions.index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.sessions.index') }}" class="nav-link {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
-                            <i class="fas fa-calendar"></i>
-                            <span>Sessions</span>
-                        </a>
-                    </li>
-                    @endif
-                    
-                    @if(Route::has('admin.cours.index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.cours.index') }}" class="nav-link {{ request()->routeIs('admin.cours.*') ? 'active' : '' }}">
-                            <i class="fas fa-graduation-cap"></i>
+                    <li class="nav-item {{ request()->routeIs('admin.cours*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.cours.index') }}" class="nav-link">
+                            <i class="fas fa-graduation-cap nav-icon"></i>
                             <span>Cours</span>
                         </a>
                     </li>
-                    @endif
                     
-                    @if(Route::has('admin.presences.index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.presences.index') }}" class="nav-link {{ request()->routeIs('admin.presences.*') ? 'active' : '' }}">
-                            <i class="fas fa-check-circle"></i>
+                    <li class="nav-item {{ request()->routeIs('admin.sessions*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.sessions.index') }}" class="nav-link">
+                            <i class="fas fa-calendar nav-icon"></i>
+                            <span>Sessions</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item {{ request()->routeIs('admin.presences*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.presences.index') }}" class="nav-link">
+                            <i class="fas fa-check-square nav-icon"></i>
                             <span>Présences</span>
                         </a>
                     </li>
-                    @endif
                     
-                    @if(auth()->user()->role === 'superadmin' && Route::has('admin.users.index'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                            <i class="fas fa-user-cog"></i>
-                            <span>Utilisateurs</span>
+                    <li class="nav-item {{ request()->routeIs('admin.ceintures*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.ceintures.index') }}" class="nav-link">
+                            <i class="fas fa-medal nav-icon"></i>
+                            <span>Ceintures</span>
                         </a>
                     </li>
-                    @endif
+                    
+                    <li class="nav-item {{ request()->routeIs('admin.seminaires*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.seminaires.index') }}" class="nav-link">
+                            <i class="fas fa-star nav-icon"></i>
+                            <span>Séminaires</span>
+                        </a>
+                    </li>
                 </ul>
-                
-                <!-- Bouton Déconnexion -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Déconnexion</span>
-                    </button>
-                </form>
             </nav>
-        </aside>
-        
-        <!-- Contenu principal -->
-        <div class="studios-main" id="main-content">
-            <!-- Header moderne -->
-            <div class="studios-header">
-                <div class="page-title">
-                    <i class="fas fa-{{ request()->routeIs('admin.dashboard') ? 'chart-line' : (request()->routeIs('admin.ecoles.*') ? 'building' : (request()->routeIs('admin.membres.*') ? 'users' : 'cog')) }}"></i>
-                    @yield('title', 'Dashboard')
-                </div>
-                <div class="header-info">
-                    <div class="header-date">{{ now()->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</div>
-                    <div class="header-time" id="current-time">{{ now()->format('H:i:s') }}</div>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name">{{ auth()->user()->name ?? 'Admin' }}</div>
+                        <div class="user-role">{{ ucfirst(auth()->user()->role ?? 'superadmin') }}</div>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
-            
-            <!-- Zone de contenu -->
-            <div class="studios-content">
-                <!-- Messages Flash -->
-                @if(session('success'))
-                <div class="alert-glass-ultimate alert-success-glass">
-                    <i class="fas fa-check-circle"></i>
-                    <div>{{ session('success') }}</div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <div>
+                    <h2 class="header-title">{{ $pageTitle ?? 'Administration' }}</h2>
                 </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="settings-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <div class="admin-content">
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
                 @endif
                 
                 @if(session('error'))
-                <div class="alert-glass-ultimate alert-danger-glass">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <div>{{ session('error') }}</div>
-                </div>
-                @endif
-                
-                @if($errors->any())
-                <div class="alert-glass-ultimate alert-warning-glass">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <ul class="mb-0">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>{{ session('error') }}</span>
                     </div>
-                </div>
                 @endif
                 
                 @yield('content')
             </div>
-        </div>
+        </main>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-    // Horloge temps réel
-    function updateTime() {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('fr-FR');
-        const timeElement = document.getElementById('current-time');
-        if (timeElement) {
-            timeElement.textContent = timeString;
+        // Initialiser Feather Icons
+        if (typeof feather !== 'undefined') {
+            feather.replace();
         }
-    }
-    
-    setInterval(updateTime, 1000);
-    
-    // Debug : vérifier que les CSS sont chargés
-    console.log('Layout admin chargé avec nouveaux CSS');
+        
+        // Mobile sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-open');
+            });
+        }
     </script>
     
     @stack('scripts')
