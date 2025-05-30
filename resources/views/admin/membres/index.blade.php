@@ -3,271 +3,198 @@
 @section('title', 'Gestion des Membres')
 
 @section('content')
-<div class="container-fluid">
-    <!-- En-tête -->
-    <div class="row mb-4 fade-in">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-2">Gestion des Membres</h1>
+                <p class="text-gray-300">{{ $stats['total'] }} membre(s) au total</p>
+            </div>
+            <a href="{{ route('admin.membres.create') }}" 
+               class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <i class="fas fa-plus mr-2"></i>Nouveau Membre
+            </a>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-500/20 text-blue-400">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-400">Total Membres</p>
+                        <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-500/20 text-green-400">
+                        <i class="fas fa-check-circle text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-400">Approuvés</p>
+                        <p class="text-2xl font-bold text-white">{{ $stats['approuves'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-500/20 text-yellow-400">
+                        <i class="fas fa-clock text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-400">En attente</p>
+                        <p class="text-2xl font-bold text-white">{{ $stats['en_attente'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-500/20 text-purple-400">
+                        <i class="fas fa-calendar text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-400">Ce mois</p>
+                        <p class="text-2xl font-bold text-white">{{ $stats['ce_mois'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtres et Recherche -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 mb-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Filtres et Recherche</h3>
+            
+            <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <h1 class="h3 mb-0 text-white">
-                        <i class="fas fa-users me-2 text-primary"></i>Gestion des Membres
-                    </h1>
-                    <p class="text-light opacity-75 mb-0">Gérez les membres de votre école de karaté</p>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                           placeholder="Nom, ville, responsable..." 
+                           class="w-full px-4 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
-                <a href="{{ route('admin.membres.create') }}" class="btn btn-glass-ultimate">
-                    <i class="fas fa-plus me-2"></i>Nouveau Membre
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Statistiques rapides -->
-    <div class="row mb-4">
-        <div class="col-md-3 slide-up" style="animation-delay: 0.1s">
-            <div class="stat-card-ultimate">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon-circle-ultimate bg-primary me-3">
-                            <i class="fas fa-users text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 text-white">{{ $membres->total() ?? 0 }}</h3>
-                            <p class="text-light opacity-75 mb-0">Total Membres</p>
-                        </div>
-                    </div>
+                <div>
+                    <select name="ecole_id" class="w-full px-4 py-2 bg-white/10 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Toutes les écoles</option>
+                        @foreach($ecoles as $ecole)
+                            <option value="{{ $ecole->id }}" {{ request('ecole_id') == $ecole->id ? 'selected' : '' }}>
+                                {{ $ecole->nom }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3 slide-up" style="animation-delay: 0.2s">
-            <div class="stat-card-ultimate">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon-circle-ultimate bg-success me-3">
-                            <i class="fas fa-check-circle text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 text-white">{{ $membres->where('approuve', true)->count() }}</h3>
-                            <p class="text-light opacity-75 mb-0">Approuvés</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 slide-up" style="animation-delay: 0.3s">
-            <div class="stat-card-ultimate">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon-circle-ultimate bg-warning me-3">
-                            <i class="fas fa-clock text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 text-white">{{ $membres->where('approuve', false)->count() }}</h3>
-                            <p class="text-light opacity-75 mb-0">En attente</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 slide-up" style="animation-delay: 0.4s">
-            <div class="stat-card-ultimate">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon-circle-ultimate bg-info me-3">
-                            <i class="fas fa-user-plus text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 text-white">{{ $membres->where('created_at', '>=', now()->startOfMonth())->count() }}</h3>
-                            <p class="text-light opacity-75 mb-0">Ce mois</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Filtres et Recherche -->
-    <div class="content-section-ultimate mb-4 slide-up" style="animation-delay: 0.5s">
-        <div class="card-body p-4">
-            <h5 class="text-white mb-3">
-                <i class="fas fa-filter me-2"></i>Filtres et Recherche
-            </h5>
-            <form method="GET" action="{{ route('admin.membres.index') }}">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label for="search" class="form-label text-light">Rechercher</label>
-                        <div class="input-group">
-                            <input type="text" id="search" name="search" 
-                                   class="form-control-glass" 
-                                   placeholder="Nom, prénom, email..."
-                                   value="{{ request('search') }}">
-                            <span class="input-group-text bg-transparent border-0">
-                                <i class="fas fa-search text-light"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <label for="ecole" class="form-label text-light">École</label>
-                        <select id="ecole" name="ecole" class="form-control-glass">
-                            <option value="">Toutes les écoles</option>
-                            @foreach($ecoles as $ecole)
-                                <option value="{{ $ecole->id }}" {{ request('ecole') == $ecole->id ? 'selected' : '' }}>
-                                    {{ $ecole->nom }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <label for="statut" class="form-label text-light">Statut</label>
-                        <select id="statut" name="statut" class="form-control-glass">
-                            <option value="">Tous les statuts</option>
-                            <option value="1" {{ request('statut') === '1' ? 'selected' : '' }}>Approuvés</option>
-                            <option value="0" {{ request('statut') === '0' ? 'selected' : '' }}>En attente</option>
-                        </select>
-                    </div>
-                    
-                    <div class="col-md-2">
-                        <label class="form-label text-light">&nbsp;</label>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-glass-ultimate flex-fill">
-                                <i class="fas fa-search me-1"></i>Filtrer
-                            </button>
-                            <a href="{{ route('admin.membres.index') }}" class="btn btn-glass">
-                                <i class="fas fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
+                <div>
+                    <select name="statut" class="w-full px-4 py-2 bg-white/10 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Tous les statuts</option>
+                        <option value="approuve" {{ request('statut') == 'approuve' ? 'selected' : '' }}>Approuvés</option>
+                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-search mr-2"></i>Filtrer
+                    </button>
+                    <a href="{{ route('admin.membres.index') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
+                        <i class="fas fa-times mr-2"></i>Reset
+                    </a>
                 </div>
             </form>
         </div>
-    </div>
 
-    <!-- Liste des Membres -->
-    <div class="content-section-ultimate slide-up" style="animation-delay: 0.6s">
-        <div class="card-body p-0">
-            @if($membres->count() > 0)
-            <div class="table-responsive">
-                <table class="table table-glass-ultimate mb-0">
-                    <thead>
+        <!-- Tableau des Membres -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-white/5">
                         <tr>
-                            <th>Membre</th>
-                            <th>Contact</th>
-                            <th>École</th>
-                            <th>Statut</th>
-                            <th>Inscription</th>
-                            <th>Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Membre</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Contact</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">École</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Statut</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Inscription</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($membres as $membre)
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-glass-ultimate me-3">
-                                        {{ strtoupper(substr($membre->prenom ?? 'N', 0, 1) . substr($membre->nom ?? 'A', 0, 1)) }}
+                    <tbody class="divide-y divide-white/10">
+                        @forelse($membres as $membre)
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                            {{ strtoupper(substr($membre->prenom, 0, 1) . substr($membre->nom, 0, 1)) }}
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-white">{{ $membre->prenom }} {{ $membre->nom }}</div>
+                                            @if($membre->date_naissance)
+                                                <div class="text-sm text-gray-400">{{ \Carbon\Carbon::parse($membre->date_naissance)->age }} ans</div>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h6 class="mb-0 text-white">{{ $membre->prenom }} {{ $membre->nom }}</h6>
-                                        @if($membre->date_naissance)
-                                            <small class="text-light opacity-75">{{ $membre->age }} ans</small>
-                                        @else
-                                            <small class="text-light opacity-75">Âge non renseigné</small>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-300">{{ $membre->email ?? 'N/A' }}</div>
+                                    <div class="text-sm text-gray-400">{{ $membre->telephone ?? 'N/A' }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-300">{{ $membre->ecole->nom ?? 'Aucune école' }}</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $membre->approuve ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400' }}">
+                                        {{ $membre->approuve ? 'Approuvé' : 'En attente' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    {{ $membre->created_at->format('d/m/Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('admin.membres.show', $membre) }}" 
+                                           class="text-blue-400 hover:text-blue-300 transition-colors">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.membres.edit', $membre) }}" 
+                                           class="text-green-400 hover:text-green-300 transition-colors">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if(!$membre->approuve)
+                                            <form action="{{ route('admin.membres.approve', $membre) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="text-yellow-400 hover:text-yellow-300 transition-colors">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="contact-info">
-                                    @if($membre->email)
-                                        <div class="contact-info-item">
-                                            <i class="fas fa-envelope"></i>
-                                            {{ $membre->email }}
-                                        </div>
-                                    @endif
-                                    @if($membre->telephone)
-                                        <div class="contact-info-item">
-                                            <i class="fas fa-phone"></i>
-                                            {{ $membre->telephone }}
-                                        </div>
-                                    @endif
-                                    @if(!$membre->email && !$membre->telephone)
-                                        <span class="text-light opacity-50">Non renseigné</span>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                @if($membre->ecole)
-                                    <span class="badge-glass-ultimate">
-                                        {{ $membre->ecole->nom }}
-                                    </span>
-                                @else
-                                    <span class="text-light opacity-50">Aucune école</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($membre->approuve)
-                                    <span class="badge-glass-ultimate badge-status-approved">
-                                        <i class="fas fa-check-circle me-1"></i>Approuvé
-                                    </span>
-                                @else
-                                    <span class="badge-glass-ultimate badge-status-pending">
-                                        <i class="fas fa-clock me-1"></i>En attente
-                                    </span>
-                                @endif
-                            </td>
-                            <td>
-                                <span class="text-light opacity-75">
-                                    {{ $membre->created_at->format('d/m/Y') }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-glass" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-glass" title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    @if(!$membre->approuve)
-                                    <button class="btn btn-sm btn-glass-success" title="Approuver">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    @endif
-                                    <button class="btn btn-sm btn-glass-danger" title="Supprimer">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-12 text-center">
+                                    <i class="fas fa-users text-4xl text-gray-600 mb-4"></i>
+                                    <h3 class="text-lg font-medium text-gray-400 mb-2">Aucun membre trouvé</h3>
+                                    <p class="text-gray-500">Créez votre premier membre ou ajustez vos filtres</p>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Pagination -->
-            @if($membres->hasPages())
-            <div class="d-flex justify-content-between align-items-center p-4 border-top border-light border-opacity-10">
-                <div class="text-light opacity-75">
-                    Affichage de {{ $membres->firstItem() }} à {{ $membres->lastItem() }} 
-                    sur {{ $membres->total() }} membres
-                </div>
-                <div class="pagination-glass">
-                    {{ $membres->links() }}
-                </div>
-            </div>
-            @endif
-            @else
-            <div class="empty-state-glass">
-                <i class="fas fa-users"></i>
-                <h4>Aucun membre trouvé</h4>
-                <p>Commencez par ajouter votre premier membre à l'école.</p>
-                <a href="{{ route('admin.membres.create') }}" class="btn btn-glass-ultimate btn-lg">
-                    <i class="fas fa-plus me-2"></i>Ajouter le premier membre
-                </a>
-            </div>
-            @endif
         </div>
+
+        <!-- Pagination -->
+        @if($membres->hasPages())
+            <div class="mt-8">
+                {{ $membres->appends(request()->query())->links() }}
+            </div>
+        @endif
     </div>
 </div>
 @endsection

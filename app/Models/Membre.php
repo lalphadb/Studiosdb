@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Carbon\Carbon;
 
 class Membre extends Model
 {
@@ -15,7 +13,7 @@ class Membre extends Model
     protected $fillable = [
         'ecole_id',
         'nom',
-        'prenom', 
+        'prenom',
         'email',
         'date_naissance',
         'sexe',
@@ -35,104 +33,30 @@ class Membre extends Model
         'updated_at' => 'datetime'
     ];
 
-    /**
-     * Relation avec l'école
-     */
-    public function ecole(): BelongsTo
+    public function ecole()
     {
         return $this->belongsTo(Ecole::class);
     }
 
-    /**
-     * Relation avec les ceintures obtenues
-     */
-    public function ceintures(): BelongsToMany
-    {
-        return $this->belongsToMany(Ceinture::class, 'ceintures_obtenues')
-                    ->withPivot('date_obtention')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Relation avec les cours (inscriptions)
-     */
-    public function cours(): BelongsToMany
-    {
-        return $this->belongsToMany(Cours::class, 'inscription_cours')
-                    ->withPivot('statut', 'date_inscription', 'montant_paye', 'notes')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Relation avec les présences
-     */
-    public function presences(): HasMany
+    public function presences()
     {
         return $this->hasMany(Presence::class);
     }
 
-    /**
-     * Relation avec les séminaires
-     */
-    public function seminaires(): BelongsToMany
+    public function ceintures()
     {
-        return $this->belongsToMany(Seminaire::class, 'membre_seminaire')
+        return $this->belongsToMany(Ceinture::class, 'ceintures_membres')
+                    ->withPivot('date_obtention')
                     ->withTimestamps();
     }
 
-    /**
-     * Scope pour les membres approuvés
-     */
-    public function scopeApprouve($query)
-    {
-        return $query->where('approuve', true);
-    }
-
-    /**
-     * Scope pour les membres en attente
-     */
-    public function scopeEnAttente($query)
-    {
-        return $query->where('approuve', false);
-    }
-
-    /**
-     * Scope pour une école spécifique
-     */
-    public function scopeParEcole($query, $ecoleId)
-    {
-        return $query->where('ecole_id', $ecoleId);
-    }
-
-    /**
-     * Accesseur pour le nom complet
-     */
-    public function getNomCompletAttribute(): string
+    public function getNomCompletAttribute()
     {
         return $this->prenom . ' ' . $this->nom;
     }
 
-    /**
-     * Accesseur pour l'âge
-     */
-    public function getAgeAttribute(): ?int
+    public function getAgeAttribute()
     {
-        return $this->date_naissance ? $this->date_naissance->age : null;
-    }
-
-    /**
-     * Obtenir la ceinture actuelle (la plus élevée)
-     */
-    public function ceintureActuelle()
-    {
-        return $this->ceintures()->orderBy('niveau', 'desc')->first();
-    }
-
-    /**
-     * Vérifier si le membre est inscrit à un cours
-     */
-    public function estInscritAuCours($coursId): bool
-    {
-        return $this->cours()->where('cours_id', $coursId)->exists();
+        return $this->date_naissance ? Carbon::parse($this->date_naissance)->age : null;
     }
 }

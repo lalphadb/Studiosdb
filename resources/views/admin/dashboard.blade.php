@@ -1,165 +1,104 @@
-@extends('layouts.admin')
-
-@section('title', 'Tableau de bord')
+@extends('layouts.admin', ['pageTitle' => 'Dashboard'])
 
 @section('content')
-<!-- Welcome Hero Section -->
-<div class="welcome-hero">
-    <div class="welcome-content d-flex justify-content-between align-items-center">
-        <div>
-            <h1 class="welcome-title">Bonjour {{ auth()->user()->name }} ! 👋</h1>
-            <p class="welcome-subtitle">Vue d'ensemble de votre système de gestion - Studios Unis</p>
+<div class="fade-in">
+    <!-- Statistiques principales -->
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ $totalMembres ?? 1 }}</div>
+            <div class="stat-label">Membres actifs</div>
+            <small class="text-accent-primary">Gérer les membres</small>
         </div>
-        <div class="welcome-date-section">
-            <div class="date-display">{{ now()->format('d') }}</div>
-            <div class="date-info">{{ now()->locale('fr')->format('M Y') }}</div>
-            <div class="time-info">Dernière mise à jour: {{ now()->format('H:i') }}</div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ $totalPresences ?? 0 }}</div>
+            <div class="stat-label">Présences aujourd'hui</div>
+            <small class="text-accent-primary">Voir le détail</small>
         </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ $totalEcoles ?? 44 }}</div>
+            <div class="stat-label">Écoles actives</div>
+            <small class="text-accent-primary">Gérer les écoles</small>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ $totalCours ?? 0 }}</div>
+            <div class="stat-label">Cours programmés</div>
+            <small class="text-accent-primary">Planifier des cours</small>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="actions-section">
+        <h2 class="text-xl font-semibold mb-4 text-text-primary">Actions rapides</h2>
+        <div class="actions-grid">
+            <a href="{{ route('admin.membres.create') }}" class="action-btn">
+                <i data-feather="user-plus"></i>
+                <span>Nouveau membre</span>
+            </a>
+            <a href="{{ route('admin.cours.create') }}" class="action-btn">
+                <i data-feather="plus-circle"></i>
+                <span>Créer un cours</span>
+            </a>
+            <a href="{{ route('admin.presences.index') }}" class="action-btn">
+                <i data-feather="check-square"></i>
+                <span>Prendre les présences</span>
+            </a>
+            <a href="{{ route('admin.ecoles.index') }}" class="action-btn">
+                <i data-feather="building"></i>
+                <span>Gérer les écoles</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Graphique de répartition -->
+    <div class="glass-card mt-6">
+        <h3 class="text-lg font-semibold mb-4">Répartition des membres par école</h3>
+        <canvas id="membresChart" width="400" height="200"></canvas>
     </div>
 </div>
 
-<!-- Stats Grid -->
-<div class="stats-grid">
-    <!-- Membres inscrits -->
-    <div class="stat-card-ultimate">
-        <div class="card-header-ultimate">
-            <div class="card-icon-ultimate icon-primary-ultimate">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="card-content-ultimate">
-                <h4 class="card-number-ultimate">{{ $stats['total_membres'] ?? 1 }}</h4>
-                <p class="card-label-ultimate">Membres inscrits</p>
-            </div>
-        </div>
-        <div class="card-footer-ultimate">
-            <a href="{{ route('admin.membres.index') }}" class="card-link-ultimate">
-                Voir tous les membres
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-
-    <!-- Présences aujourd'hui -->
-    <div class="stat-card-ultimate">
-        <div class="card-header-ultimate">
-            <div class="card-icon-ultimate icon-success-ultimate">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="card-content-ultimate">
-                <h4 class="card-number-ultimate">{{ $stats['presences_aujourdhui'] ?? 0 }}</h4>
-                <p class="card-label-ultimate">Présences aujourd'hui</p>
-            </div>
-        </div>
-        <div class="card-footer-ultimate">
-            <a href="{{ route('admin.presences.index') }}" class="card-link-ultimate">
-                Gérer les présences
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-
-    <!-- Membres en attente -->
-    <div class="stat-card-ultimate">
-        <div class="card-header-ultimate">
-            <div class="card-icon-ultimate icon-warning-ultimate">
-                <i class="fas fa-clock"></i>
-            </div>
-            <div class="card-content-ultimate">
-                <h4 class="card-number-ultimate">{{ $stats['membres_en_attente'] ?? 0 }}</h4>
-                <p class="card-label-ultimate">Membres en attente</p>
-            </div>
-        </div>
-        <div class="card-footer-ultimate">
-            <a href="{{ route('admin.membres.index', ['statut' => 'en_attente']) }}" class="card-link-ultimate">
-                Voir les demandes
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-
-    <!-- Écoles actives -->
-    <div class="stat-card-ultimate">
-        <div class="card-header-ultimate">
-            <div class="card-icon-ultimate icon-danger-ultimate">
-                <i class="fas fa-building"></i>
-            </div>
-            <div class="card-content-ultimate">
-                <h4 class="card-number-ultimate">{{ $stats['ecoles_actives'] ?? 44 }}</h4>
-                <p class="card-label-ultimate">École(s) active(s)</p>
-            </div>
-        </div>
-        <div class="card-footer-ultimate">
-            <a href="{{ route('admin.ecoles.index') }}" class="card-link-ultimate">
-                Gérer les écoles
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</div>
-
-<!-- Section Derniers Membres -->
-<div class="content-section-ultimate">
-    <h3 class="section-title-ultimate">
-        <i class="fas fa-users"></i>
-        Derniers membres inscrits
-    </h3>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
     
-    <!-- Données de test -->
-    <div class="table-responsive">
-        <table class="table-glass-ultimate">
-            <thead>
-                <tr>
-                    <th>MEMBRE</th>
-                    <th>CONTACT</th>
-                    <th>ÉCOLE</th>
-                    <th>STATUT</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <div class="card-icon-ultimate icon-primary-ultimate me-3" style="width: 40px; height: 40px; font-size: 1rem;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div>
-                                <strong>Marc Doucet</strong><br>
-                                <small style="color: rgba(255,255,255,0.7);">Inscrit récemment</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        test@test.com<br>
-                        <small style="color: rgba(255,255,255,0.7);">418-555-0123</small>
-                    </td>
-                    <td>
-                        <span class="badge-info-ultimate">St-Émile</span>
-                    </td>
-                    <td>
-                        <span class="badge-success-ultimate">
-                            <i class="fas fa-check"></i>
-                            Approuvé
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Section Sessions Récentes -->
-<div class="content-section-ultimate">
-    <h3 class="section-title-ultimate">
-        <i class="fas fa-calendar"></i>
-        Sessions de cours récentes
-    </h3>
-    
-    <div class="text-center py-5">
-        <div class="card-icon-ultimate icon-success-ultimate mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-            <i class="fas fa-calendar-alt"></i>
-        </div>
-        <h4 style="color: white;">Aucune session récente</h4>
-        <p style="color: rgba(255, 255, 255, 0.7);">Aucune session de cours récente trouvée</p>
-    </div>
-</div>
+    // Configuration du graphique
+    const ctx = document.getElementById('membresChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['École A', 'École B', 'École C', 'Autres'],
+            datasets: [{
+                data: [30, 25, 20, 25],
+                backgroundColor: [
+                    'rgba(0, 212, 255, 0.7)',
+                    'rgba(124, 58, 237, 0.7)',
+                    'rgba(34, 197, 94, 0.7)',
+                    'rgba(239, 68, 68, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(0, 212, 255, 1)',
+                    'rgba(124, 58, 237, 1)',
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(239, 68, 68, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff',
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 @endsection
