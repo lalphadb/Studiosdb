@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class CoursHoraire extends Model
 {
@@ -17,28 +18,29 @@ class CoursHoraire extends Model
         'heure_debut',
         'heure_fin',
         'salle',
-        'notes',
-        'active',
+        'active'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'heure_debut' => 'datetime:H:i',
+        'heure_fin' => 'datetime:H:i',
+        'active' => 'boolean'
     ];
 
+    // Relations
     public function cours()
     {
         return $this->belongsTo(Cours::class);
     }
 
-    public function scopeActive($query)
+    // Accesseurs pour les heures formatées
+    public function getHeureDebutFormatAttribute()
     {
-        return $query->where('active', true);
+        return $this->heure_debut ? Carbon::parse($this->heure_debut)->format('H:i') : null;
     }
 
-    public function scopeByJour($query, $jour)
+    public function getHeureFinFormatAttribute()
     {
-        return $query->where('jour', $jour);
+        return $this->heure_fin ? Carbon::parse($this->heure_fin)->format('H:i') : null;
     }
 }

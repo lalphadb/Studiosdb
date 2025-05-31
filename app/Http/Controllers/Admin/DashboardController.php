@@ -27,7 +27,7 @@ class DashboardController extends Controller
                         'membresApprouves' => Membre::where('approuve', true)->count(),
                         'membresEnAttente' => Membre::where('approuve', false)->count(),
                         'totalEcoles' => Ecole::where('active', true)->count(),
-                        'totalCours' => Cours::where('statut', 'actif')->count(),
+                        'totalCours' => Cours::where('actif', true)->count(),
                         'presencesAujourdhui' => Presence::whereDate('date_presence', today())->count(),
                     ];
                 } else {
@@ -36,7 +36,7 @@ class DashboardController extends Controller
                         'membresApprouves' => Membre::where('ecole_id', $user->ecole_id)->where('approuve', true)->count(),
                         'membresEnAttente' => Membre::where('ecole_id', $user->ecole_id)->where('approuve', false)->count(),
                         'totalEcoles' => 1,
-                        'totalCours' => Cours::where('ecole_id', $user->ecole_id)->where('statut', 'actif')->count(),
+                        'totalCours' => Cours::where('ecole_id', $user->ecole_id)->where('actif', true)->count(),
                         'presencesAujourdhui' => Presence::whereHas('cours', function($q) use ($user) {
                             $q->where('ecole_id', $user->ecole_id);
                         })->whereDate('date_presence', today())->count(),
@@ -84,13 +84,13 @@ class DashboardController extends Controller
                     'membres_approuves' => Membre::where('approuve', true)->count(),
                     'membres_en_attente' => Membre::where('approuve', false)->count(),
                     'ecoles_actives' => Ecole::where('active', true)->count(),
-                    'cours_actifs' => Cours::where('statut', 'actif')->count(),
+                    'cours_actifs' => Cours::where('actif', true)->count(),
                 ];
             } else {
                 $data = [
                     'membres_approuves' => Membre::where('ecole_id', $user->ecole_id)->where('approuve', true)->count(),
                     'membres_en_attente' => Membre::where('ecole_id', $user->ecole_id)->where('approuve', false)->count(),
-                    'cours_actifs' => Cours::where('ecole_id', $user->ecole_id)->where('statut', 'actif')->count(),
+                    'cours_actifs' => Cours::where('ecole_id', $user->ecole_id)->where('actif', true)->count(),
                 ];
             }
             

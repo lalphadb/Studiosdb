@@ -51,6 +51,13 @@
                             <span>Membres</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.cours.*') ? 'active' : '' }}" 
+                           href="{{ route('admin.cours.index') }}">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Cours</span>
+                        </a>
+                    </li>
                     
                     <li class="nav-item {{ request()->routeIs('admin.cours*') ? 'active' : '' }}">
                         <a href="{{ route('admin.cours.index') }}" class="nav-link">
@@ -165,3 +172,5 @@
     @stack('scripts')
 </body>
 </html>
+
+@include('components.footer-loi25')

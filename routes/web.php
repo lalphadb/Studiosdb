@@ -65,6 +65,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::patch('cours/{cours}/toggle-status', [CoursController::class, 'toggleStatus'])
         ->name('cours.toggle-status');
     
+    // Module INSCRIPTIONS - Gestion des inscriptions aux cours
+    Route::resource('inscriptions', \App\Http\Controllers\Admin\InscriptionController::class);
+    
     // Module SESSIONS - Gestion complète
     Route::resource('sessions', SessionController::class);
     Route::patch('sessions/{session}/toggle-active', [SessionController::class, 'toggleActive'])
@@ -130,35 +133,6 @@ Route::get('/politique-confidentialite', function () {
 })->name('privacy-policy');
 
 Route::get('/conditions-utilisation', function () {
-    return view('legal.terms');
-})->name('terms');
-
-Route::get('/avis-collecte', function () {
-    return view('legal.data-collection');
-})->name('data-collection');
-
-Route::get('/droits-acces', function () {
-    return view('legal.access-rights');
-})->name('access-rights');
-
-Route::get('/gestion-consentements', function () {
-    return view('legal.consent-management');
-})->name('consent-management');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-// Routes Footer Loi 25
-Route::get('/politique-confidentialite', function () {
-    return view('politique');
-})->name('privacy-policy');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-// Rediriger les autres routes vers la politique complète
-Route::get('/conditions-utilisation', function () {
     return redirect()->route('privacy-policy')->with('section', 'conditions');
 })->name('terms');
 
@@ -174,4 +148,4 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');

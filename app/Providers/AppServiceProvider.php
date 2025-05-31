@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Configurer Carbon en français
+        Carbon::setLocale('fr_CA');
+        setlocale(LC_TIME, 'fr_CA.UTF-8', 'fr_CA', 'fr');
+        
+        // Format par défaut pour les dates
+        \Illuminate\Support\Facades\Date::macro('toFormattedDateString', function () {
+            return $this->format('d/m/Y');
+        });
     }
 }

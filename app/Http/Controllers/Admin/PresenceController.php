@@ -70,7 +70,7 @@ class PresenceController extends Controller
     {
         $this->authorize('create', Presence::class);
         
-        $query = Cours::where('statut', 'actif')->with('ecole');
+        $query = Cours::where('actif', true)->with('ecole');
         
         if (Auth::user()->role !== 'superadmin' && Auth::user()->ecole_id) {
             $query->where('ecole_id', Auth::user()->ecole_id);
