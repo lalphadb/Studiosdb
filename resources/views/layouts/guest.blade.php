@@ -10,5 +10,6 @@
     <main class="py-5">
         @yield('content')
     </main>
+<script src="{{ asset('js/theta-fix.js') }}"></script>
 </body>
 </html>

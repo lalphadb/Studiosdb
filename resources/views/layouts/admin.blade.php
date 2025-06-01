@@ -19,7 +19,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
     <!-- STYLE GLASSMORPHIQUE INLINE -->
     <style>
@@ -414,6 +414,7 @@
     </style>
     
     @stack('styles')
+    <link rel="stylesheet" href="{{ asset('css/studiosdb-glassmorphic-complete.css') }}">
 </head>
 <body>
     <div class="theta-wrapper">
@@ -560,5 +561,6 @@
     </script>
     
     @stack('scripts')
+<script src="{{ asset('js/theta-fix.js') }}"></script>
 </body>
 </html>

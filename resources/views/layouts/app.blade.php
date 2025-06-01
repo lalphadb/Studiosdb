@@ -29,5 +29,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     @stack('scripts')
+<script src="{{ asset('js/theta-fix.js') }}"></script>
 </body>
 </html>
