@@ -1,4 +1,5 @@
 <?php
+// app/Models/User.php
 
 namespace App\Models;
 
@@ -11,59 +12,46 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'prenom',
+        'nom',
+        'ecole_id',
+        'active',
+        'last_login_at',
+        'last_login_ip',
+        'login_attempts',
+        'locked_until',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login_at' => 'datetime',  // IMPORTANT : Ajouter cette ligne
+        'locked_until' => 'datetime',   // IMPORTANT : Ajouter cette ligne
+        'active' => 'boolean',
     ];
 
-    /**
-     * Get the ecoles for the user.
-     */
-    public function ecoles()
+    public function ecole()
     {
-        return $this->hasMany(Ecole::class);
+        return $this->belongsTo(Ecole::class);
     }
 
-    /**
-     * Check if user is a superadmin
-     */
     public function isSuperAdmin()
     {
-        return $this->hasRole('superadmin');
+        return $this->role === 'superadmin';
     }
 
-    /**
-     * Check if user is an admin
-     */
     public function isAdmin()
     {
-        return $this->hasRole('admin') || $this->hasRole('superadmin');
+        return in_array($this->role, ['admin', 'superadmin']);
     }
 }

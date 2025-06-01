@@ -3,169 +3,97 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class LoginController extends Controller
 {
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Display the login view.
      */
-    protected $redirectTo = '/admin/dashboard';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
-
-    /**
-     * Show the application's login form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showLoginForm()
+    public function create(): View
     {
         return view('auth.login');
     }
 
     /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Handle an incoming authentication request.
      */
-    public function login(Request $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $this->validateLogin($request);
+        $request->authenticate();
 
-        if ($this->attemptLogin($request)) {
-            $request->session()->regenerate();
-            
-            Log::info('User logged in', [
-                'user_id' => Auth::id(),
-                'email' => Auth::user()->email,
-                'role' => Auth::user()->role,
-                'ecole_id' => Auth::user()->ecole_id
-            ]);
+        $request->session()->regenerate();
 
-            return $this->sendLoginResponse($request);
+        // Log l'activité si spatie/laravel-activitylog est installé
+        if (class_exists(\Spatie\Activitylog\Models\Activity::class)) {
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['ip' => $request->ip()])
+                ->log('Connexion réussie');
         }
 
-        return $this->sendFailedLoginResponse($request);
+        // Redirection selon le rôle
+        return $this->redirectBasedOnRole();
     }
 
     /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Destroy an authenticated session.
      */
-    protected function validateLogin(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-    }
-
-    /**
-     * Attempt to log the user into the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function attemptLogin(Request $request)
-    {
-        return Auth::attempt(
-            $this->credentials($request),
-            $request->filled('remember')
-        );
-    }
-
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function credentials(Request $request)
-    {
-        return $request->only('email', 'password');
-    }
-
-    /**
-     * Send the response after the user was authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'redirect' => $this->redirectPath()
-            ]);
+        // Log l'activité si spatie/laravel-activitylog est installé
+        if (auth()->check() && class_exists(\Spatie\Activitylog\Models\Activity::class)) {
+            activity()
+                ->causedBy(auth()->user())
+                ->log('Déconnexion');
         }
 
-        return redirect()->intended($this->redirectPath());
-    }
-
-    /**
-     * Get the failed login response instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
-        ]);
-    }
-
-    /**
-     * Get the post register / login redirect path.
-     *
-     * @return string
-     */
-    public function redirectPath()
-    {
-        return $this->redirectTo;
-    }
-
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
-    public function logout(Request $request)
-    {
-        Auth::logout();
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        if ($request->ajax()) {
-            return response()->json(['success' => true]);
-        }
-
         return redirect('/');
+    }
+
+    /**
+     * Redirection basée sur le rôle de l'utilisateur
+     */
+    protected function redirectBasedOnRole(): RedirectResponse
+    {
+        $user = auth()->user();
+        
+        if ($user->hasRole(['super-admin', 'admin'])) {
+            return redirect()->intended(route('admin.dashboard'));
+        } elseif ($user->hasRole('instructeur')) {
+            return redirect()->intended(route('admin.cours.index'));
+        } else {
+            // Pour les membres réguliers
+            if ($user->membre) {
+                return redirect()->intended(route('admin.membres.show', $user->membre->id));
+            }
+            return redirect()->intended(route('admin.dashboard'));
+        }
+    }
+
+    /**
+     * Reset login attempts (pour LoginRequest)
+     */
+    public function resetLoginAttempts(Request $request): void
+    {
+        $key = $this->throttleKey($request);
+        cache()->forget($key);
+    }
+
+    /**
+     * Get the throttle key
+     */
+    protected function throttleKey(Request $request): string
+    {
+        return strtolower($request->input('email')).'|'.$request->ip();
     }
 }

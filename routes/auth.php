@@ -1,16 +1,25 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+Route::middleware('guest')->group(function () {
+    Route::get('login', [LoginController::class, 'create'])->name('login');
+    Route::post('login', [LoginController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+    
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', function() { 
+            return view('profile.index', ['user' => auth()->user()]); 
+        })->name('index');
+    });
 });

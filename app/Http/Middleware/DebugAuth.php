@@ -5,22 +5,25 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class DebugAuth
 {
+    /**
+     * Handle an incoming request.
+     */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Log::info('User accessing: ' . $request->path(), [
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'role' => $user->role,
-                'ecole_id' => $user->ecole_id,
+        if (auth()->check()) {
+            Log::info('User authenticated', [
+                'user_id' => auth()->id(),
+                'email' => auth()->user()->email,
+                'active' => auth()->user()->active,
+                'role' => auth()->user()->role,
             ]);
+        } else {
+            Log::info('No authenticated user');
         }
-        
+
         return $next($request);
     }
 }

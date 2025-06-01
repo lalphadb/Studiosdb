@@ -7,25 +7,18 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function show()
-    {
-        return view('contact');
-    }
-    
     public function submit(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
-            'subject' => 'required|string|in:general,inscription,horaire,tarifs,donnees,technique,plainte,autre',
-            'message' => 'required|string|max:2000',
-            'consent' => 'required|accepted'
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'sujet' => 'required|string|max:255',
+            'message' => 'required|string|max:5000',
         ]);
-        
-        // Ici vous pouvez ajouter la logique pour envoyer l'email
-        // Mail::to('info@studiosunis.com')->send(new ContactMessage($validated));
-        
-        return redirect()->route('contact')->with('success', 'Votre message a été envoyé avec succès. Nous vous répondrons dans les 24-48 heures.');
+
+        // Envoyer l'email ou enregistrer dans la BD
+        // Pour l'instant, juste rediriger avec un message de succès
+
+        return back()->with('success', 'Votre message a été envoyé avec succès.');
     }
 }

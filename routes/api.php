@@ -7,19 +7,14 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// API Routes for StudiosDB
-Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+// API Routes for StudiosDB avec préfixe de nom
+Route::prefix('v1')->middleware('auth:sanctum')->name('api.')->group(function () {
     // Écoles API endpoints
     Route::apiResource('ecoles', App\Http\Controllers\Api\EcoleController::class);
     
@@ -40,12 +35,12 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 });
 
 // Public API endpoints (no authentication required)
-Route::prefix('public')->group(function () {
+Route::prefix('public')->name('api.public.')->group(function () {
     // Public endpoints for mobile app or external integrations
     Route::get('ecoles', function () {
         return response()->json([
             'status' => 'success',
             'message' => 'Public API endpoint for Studios Unis'
         ]);
-    });
+    })->name('ecoles');
 });
