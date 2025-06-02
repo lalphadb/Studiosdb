@@ -14,11 +14,11 @@
             <p class="text-light mb-0">{{ $ecole->nom }}</p>
         </div>
         <div class="d-flex gap-2">
-            <a href="{{ route('ecoles.show', $ecole) }}" class="btn btn-outline-light">
+            <a href="{{ route('admin.ecoles.show', $ecole) }}" class="btn btn-outline-light">
                 <i class="fas fa-eye me-2"></i>
                 Voir l'école
             </a>
-            <a href="{{ route('ecoles.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('admin.ecoles.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-list me-2"></i>
                 Liste des écoles
             </a>
@@ -36,7 +36,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('ecoles.update', $ecole) }}">
+                    <form method="POST" action="{{ route('admin.ecoles.update', $ecole) }}">
                         @csrf
                         @method('PUT')
 
@@ -198,7 +198,7 @@
                         <!-- Actions -->
                         <div class="d-flex justify-content-between">
                             <div>
-                                <a href="{{ route('ecoles.show', $ecole) }}" class="btn btn-outline-light">
+                                <a href="{{ route('admin.ecoles.show', $ecole) }}" class="btn btn-outline-light">
                                     <i class="fas fa-times me-2"></i>
                                     Annuler
                                 </a>

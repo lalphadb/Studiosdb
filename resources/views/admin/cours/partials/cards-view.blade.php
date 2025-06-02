@@ -72,12 +72,12 @@
                 </div>
                 <div class="card-footer" style="background: rgba(255,255,255,0.05);">
                     <div class="btn-group btn-group-sm w-100">
-                        <a href="{{ route('cours.show', $coursItem) }}" 
+                        <a href="{{ route('admin.cours.show', $coursItem) }}" 
                            class="btn btn-outline-info" 
                            title="Voir">
                             <i class="fas fa-eye"></i> Voir
                         </a>
-                        <a href="{{ route('cours.edit', $coursItem) }}" 
+                        <a href="{{ route('admin.cours.edit', $coursItem) }}" 
                            class="btn btn-outline-warning" 
                            title="Modifier">
                             <i class="fas fa-edit"></i> Modifier
@@ -90,7 +90,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
                             <li>
-                                <form action="{{ route('cours.toggle-status', $coursItem) }}" 
+                                <form action="{{ route('admin.cours.toggle-status', $coursItem) }}" 
                                       method="POST">
                                     @csrf
                                     @method('PATCH')
@@ -101,7 +101,7 @@
                                 </form>
                             </li>
                             <li>
-                                <form action="{{ route('cours.duplicate', $coursItem) }}" 
+                                <form action="{{ route('admin.cours.duplicate', $coursItem) }}" 
                                       method="POST">
                                     @csrf
                                     <button type="submit" class="dropdown-item">
@@ -111,7 +111,7 @@
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <form action="{{ route('cours.destroy', $coursItem) }}" 
+                                <form action="{{ route('admin.cours.destroy', $coursItem) }}" 
                                       method="POST" 
                                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours?')">
                                     @csrf
@@ -132,7 +132,7 @@
                 <div class="card-body">
                     <i class="fas fa-chalkboard-teacher fa-3x mb-3 text-muted"></i>
                     <p class="mb-0">Aucun cours trouvé</p>
-                    <a href="{{ route('cours.create') }}" class="btn btn-info mt-3">
+                    <a href="{{ route('admin.cours.create') }}" class="btn btn-info mt-3">
                         <i class="fas fa-plus me-2"></i>Créer votre premier cours
                     </a>
                 </div>

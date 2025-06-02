@@ -54,7 +54,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        
+         // ... autres middlewares
+        'log.auth' => \App\Http\Middleware\LogAuthentication::class,
         // Middlewares personnalisés
         'active' => \App\Http\Middleware\EnsureUserIsActive::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,

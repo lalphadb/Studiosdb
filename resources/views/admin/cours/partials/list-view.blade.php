@@ -60,17 +60,17 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('cours.show', $coursItem) }}" 
+                                    <a href="{{ route('admin.cours.show', $coursItem) }}" 
                                        class="btn btn-outline-info" 
                                        title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('cours.edit', $coursItem) }}" 
+                                    <a href="{{ route('admin.cours.edit', $coursItem) }}" 
                                        class="btn btn-outline-warning" 
                                        title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('cours.toggle-status', $coursItem) }}" 
+                                    <form action="{{ route('admin.cours.toggle-status', $coursItem) }}" 
                                           method="POST" 
                                           class="d-inline">
                                         @csrf

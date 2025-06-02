@@ -10,7 +10,7 @@
                 <h1 class="text-3xl font-bold text-white mb-2">Gestion des Membres</h1>
                 <p class="text-gray-300">{{ $stats['total'] }} membre(s) au total</p>
             </div>
-            <a href="{{ route('membres.create') }}" 
+            <a href="{{ route('admin.membres.create') }}" 
                class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
                 <i class="fas fa-plus mr-2"></i>Nouveau Membre
             </a>
@@ -101,7 +101,7 @@
                     <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-search mr-2"></i>Filtrer
                     </button>
-                    <a href="{{ route('membres.index') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
+                    <a href="{{ route('admin.membres.index') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
                         <i class="fas fa-times mr-2"></i>Reset
                     </a>
                 </div>
@@ -155,16 +155,16 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex gap-2">
-                                        <a href="{{ route('membres.show', $membre) }}" 
+                                        <a href="{{ route('admin.membres.show', $membre) }}" 
                                            class="text-blue-400 hover:text-blue-300 transition-colors">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('membres.edit', $membre) }}" 
+                                        <a href="{{ route('admin.membres.edit', $membre) }}" 
                                            class="text-green-400 hover:text-green-300 transition-colors">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @if(!$membre->approuve)
-                                            <form action="{{ route('membres.approve', $membre) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.membres.approve', $membre) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="text-yellow-400 hover:text-yellow-300 transition-colors">

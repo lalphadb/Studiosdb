@@ -12,11 +12,11 @@
                 <p class="text-gray-300">Détails du membre</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('membres.edit', $membre) }}" 
+                <a href="{{ route('admin.membres.edit', $membre) }}" 
                    class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
                     <i class="fas fa-edit mr-2"></i>Modifier
                 </a>
-                <a href="{{ route('membres.index') }}" 
+                <a href="{{ route('admin.membres.index') }}" 
                    class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
                     <i class="fas fa-arrow-left mr-2"></i>Retour
                 </a>
@@ -121,7 +121,7 @@
                         </span>
                         
                         @if(!$membre->approuve)
-                            <form action="{{ route('membres.approve', $membre) }}" method="POST" class="mt-4">
+                            <form action="{{ route('admin.membres.approve', $membre) }}" method="POST" class="mt-4">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">

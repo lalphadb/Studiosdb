@@ -91,17 +91,17 @@
                                         </div>
                                         <div class="card-footer py-2" style="background: rgba(255,255,255,0.05);">
                                             <div class="btn-group btn-group-sm w-100">
-                                                <a href="{{ route('cours.show', $item['cours']) }}" 
+                                                <a href="{{ route('admin.cours.show', $item['cours']) }}" 
                                                    class="btn btn-outline-info" 
                                                    title="Voir">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('cours.edit', $item['cours']) }}" 
+                                                <a href="{{ route('admin.cours.edit', $item['cours']) }}" 
                                                    class="btn btn-outline-warning" 
                                                    title="Modifier">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('cours.duplicate', $item['cours']) }}" 
+                                                <form action="{{ route('admin.cours.duplicate', $item['cours']) }}" 
                                                       method="POST" 
                                                       class="d-inline">
                                                     @csrf

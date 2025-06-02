@@ -6,16 +6,16 @@
 <div class="container-fluid px-4">
     <div class="row mb-4">
         <div class="col-12">
-            @include('components.back-button', ['route' => route('cours.index')])
+            @include('components.back-button', ['route' => route('admin.cours.index')])
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <h1 class="h3 text-white mb-0">
                     <i class="fas fa-chalkboard-teacher me-2"></i>{{ $cours->nom }}
                 </h1>
                 <div class="btn-group">
-                    <a href="{{ route('cours.edit', $cours) }}" class="btn btn-warning">
+                    <a href="{{ route('admin.cours.edit', $cours) }}" class="btn btn-warning">
                         <i class="fas fa-edit me-2"></i>Modifier
                     </a>
-                    <form action="{{ route('cours.toggle-status', $cours) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.cours.toggle-status', $cours) }}" method="POST" class="d-inline">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="btn btn-{{ $cours->actif ? 'secondary' : 'success' }}">
@@ -161,7 +161,7 @@
                             @foreach($inscriptions as $inscription)
                             <tr>
                                 <td>
-                                    <a href="{{ route('membres.show', $inscription->membre) }}" 
+                                    <a href="{{ route('admin.membres.show', $inscription->membre) }}" 
                                        class="text-info text-decoration-none">
                                         {{ $inscription->membre->prenom }} {{ $inscription->membre->nom }}
                                     </a>
@@ -175,7 +175,7 @@
                                         <i class="fas fa-user-minus"></i>
                                     </button>
                                     <form id="desinscription-{{ $inscription->id }}" 
-                                          action="{{ route('inscriptions.destroy', $inscription) }}" 
+                                          action="{{ route('admin.inscriptions.destroy', $inscription) }}" 
                                           method="POST" 
                                           class="d-none">
                                         @csrf

@@ -6,14 +6,14 @@
 <div class="container-fluid px-4">
     <div class="row mb-4">
         <div class="col-12">
-            @include('components.back-button', ['route' => route('cours.index')])
+            @include('components.back-button', ['route' => route('admin.cours.index')])
             <h1 class="h3 text-white mb-0">
                 <i class="fas fa-plus-circle me-2"></i>Créer un Cours
             </h1>
         </div>
     </div>
 
-    <form action="{{ route('cours.store') }}" method="POST" id="cours-form">
+    <form action="{{ route('admin.cours.store') }}" method="POST" id="cours-form">
         @csrf
         <div class="row">
             <div class="col-lg-8">
@@ -269,7 +269,7 @@
                 <button type="submit" class="btn btn-info btn-lg">
                     <i class="fas fa-save me-2"></i>Créer le cours
                 </button>
-                <a href="{{ route('cours.index') }}" class="btn btn-secondary btn-lg">
+                <a href="{{ route('admin.cours.index') }}" class="btn btn-secondary btn-lg">
                     <i class="fas fa-times me-2"></i>Annuler
                 </a>
             </div>

@@ -11,7 +11,7 @@
             <p class="text-muted">{{ $ecoles->total() }} école(s) au total</p>
         </div>
         <div>
-            <a href="{{ route('ecoles.create') }}" class="btn btn-glass-ultimate">
+            <a href="{{ route('admin.ecoles.create') }}" class="btn btn-glass-ultimate">
                 <i class="fas fa-plus me-2"></i>Nouvelle école
             </a>
         </div>
@@ -19,7 +19,7 @@
 
     <!-- Filtres -->
     <div class="content-section-ultimate mb-4">
-        <form method="GET" action="{{ route('ecoles.index') }}">
+        <form method="GET" action="{{ route('admin.ecoles.index') }}">
             <div class="row align-items-end">
                 <div class="col-md-4 mb-3">
                     <label for="search" class="form-label text-white">Rechercher</label>
@@ -118,12 +118,12 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('ecoles.show', $ecole) }}" 
+                                    <a href="{{ route('admin.ecoles.show', $ecole) }}" 
                                        class="btn btn-sm btn-outline-info" 
                                        title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('ecoles.edit', $ecole) }}" 
+                                    <a href="{{ route('admin.ecoles.edit', $ecole) }}" 
                                        class="btn btn-sm btn-outline-warning" 
                                        title="Modifier">
                                         <i class="fas fa-edit"></i>
@@ -163,7 +163,7 @@
                         Commencez par ajouter votre première école.
                     @endif
                 </p>
-                <a href="{{ route('ecoles.create') }}" class="btn btn-glass-ultimate">
+                <a href="{{ route('admin.ecoles.create') }}" class="btn btn-glass-ultimate">
                     <i class="fas fa-plus me-2"></i>Ajouter une école
                 </a>
             </div>

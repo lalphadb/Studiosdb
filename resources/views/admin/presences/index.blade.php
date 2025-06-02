@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Présences</h1>
             <p class="text-gray-600">Gérez les présences des membres</p>
         </div>
-        <a href="{{ route('presences.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+        <a href="{{ route('admin.presences.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
             Nouvelle Présence
         </a>
     </div>
@@ -54,7 +54,7 @@
             <div class="text-center py-12">
                 <h3 class="text-lg font-medium text-gray-900">Aucune présence</h3>
                 <p class="text-gray-500">Commencez à prendre les présences.</p>
-                <a href="{{ route('presences.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <a href="{{ route('admin.presences.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                     Prendre présence
                 </a>
             </div>

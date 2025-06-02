@@ -18,13 +18,13 @@
         </div>
         
         <div class="d-flex gap-2">
-            <a href="{{ route('ecoles.index') }}" class="btn btn-outline-light">
+            <a href="{{ route('admin.ecoles.index') }}" class="btn btn-outline-light">
                 <i class="fas fa-arrow-left me-2"></i>
                 Retour à la liste
             </a>
             
             @if(auth()->user()->role === 'superadmin' || auth()->user()->ecole_id === $ecole->id)
-            <a href="{{ route('ecoles.edit', $ecole) }}" class="btn btn-primary">
+            <a href="{{ route('admin.ecoles.edit', $ecole) }}" class="btn btn-primary">
                 <i class="fas fa-edit me-2"></i>
                 Modifier
             </a>
@@ -223,7 +223,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Toggle Status -->
-                    <form method="POST" action="{{ route('ecoles.toggle-status', $ecole) }}" class="mb-3">
+                    <form method="POST" action="{{ route('admin.ecoles.toggle-status', $ecole) }}" class="mb-3">
                         @csrf
                         @method('PATCH')
                         @if($ecole->active)
@@ -242,7 +242,7 @@
 
                     <!-- Supprimer -->
                     @if(($stats['membres_total'] ?? 0) == 0 && ($stats['cours_actifs'] ?? 0) == 0)
-                    <form method="POST" action="{{ route('ecoles.destroy', $ecole) }}">
+                    <form method="POST" action="{{ route('admin.ecoles.destroy', $ecole) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger w-100" 

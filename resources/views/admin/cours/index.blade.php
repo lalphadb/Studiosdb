@@ -10,7 +10,7 @@
                 <h1 class="h3 text-white mb-0">
                     <i class="fas fa-chalkboard-teacher me-2"></i>Gestion des Cours
                 </h1>
-                <a href="{{ route('cours.create') }}" class="btn btn-info">
+                <a href="{{ route('admin.cours.create') }}" class="btn btn-info">
                     <i class="fas fa-plus me-2"></i>Nouveau Cours
                 </a>
             </div>
@@ -96,7 +96,7 @@
     <!-- Filtres -->
     <div class="card bg-dark text-white mb-4" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
         <div class="card-body">
-            <form method="GET" action="{{ route('cours.index') }}" class="row g-3">
+            <form method="GET" action="{{ route('admin.cours.index') }}" class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label small text-muted">Session</label>
                     <select name="session_id" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;">
@@ -128,7 +128,7 @@
                     <button type="submit" class="btn btn-info me-2">
                         <i class="fas fa-filter me-2"></i>Filtrer
                     </button>
-                    <a href="{{ route('cours.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('admin.cours.index') }}" class="btn btn-secondary">
                         <i class="fas fa-times me-2"></i>Réinitialiser
                     </a>
                 </div>

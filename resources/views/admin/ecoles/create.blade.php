@@ -14,7 +14,7 @@
             <p class="text-light mb-0">Ajoutez une nouvelle école au système Studios Unis</p>
         </div>
         <div>
-            <a href="{{ route('ecoles.index') }}" class="btn btn-outline-light">
+            <a href="{{ route('admin.ecoles.index') }}" class="btn btn-outline-light">
                 <i class="fas fa-arrow-left me-2"></i>
                 Retour à la liste
             </a>
@@ -32,7 +32,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('ecoles.store') }}">
+                    <form method="POST" action="{{ route('admin.ecoles.store') }}">
                         @csrf
 
                         <!-- Erreurs de validation -->
@@ -195,7 +195,7 @@
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-3">
-                            <a href="{{ route('ecoles.index') }}" class="btn btn-outline-light">
+                            <a href="{{ route('admin.ecoles.index') }}" class="btn btn-outline-light">
                                 <i class="fas fa-times me-2"></i>
                                 Annuler
                             </a>

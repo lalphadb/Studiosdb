@@ -44,3 +44,5 @@ Route::prefix('public')->name('api.public.')->group(function () {
         ]);
     })->name('ecoles');
 });
+// Inclure les routes API publiques
+require __DIR__.'/api/public.php';

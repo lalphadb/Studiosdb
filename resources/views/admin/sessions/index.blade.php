@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Sessions de Cours</h1>
             <p class="text-gray-600">Gérez les sessions de cours</p>
         </div>
-        <a href="{{ route('sessions.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+        <a href="{{ route('admin.sessions.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
             Nouvelle Session
         </a>
     </div>
@@ -55,8 +55,8 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm font-medium space-x-2">
-                                <a href="{{ route('sessions.show', $session) }}" class="text-blue-600 hover:text-blue-900">Voir</a>
-                                <a href="{{ route('sessions.edit', $session) }}" class="text-indigo-600 hover:text-indigo-900">Modifier</a>
+                                <a href="{{ route('admin.sessions.show', $session) }}" class="text-blue-600 hover:text-blue-900">Voir</a>
+                                <a href="{{ route('admin.sessions.edit', $session) }}" class="text-indigo-600 hover:text-indigo-900">Modifier</a>
                             </td>
                         </tr>
                         @endforeach
@@ -67,7 +67,7 @@
             <div class="text-center py-12">
                 <h3 class="text-lg font-medium text-gray-900">Aucune session</h3>
                 <p class="text-gray-500">Créez votre première session de cours.</p>
-                <a href="{{ route('sessions.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <a href="{{ route('admin.sessions.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                     Créer une session
                 </a>
             </div>

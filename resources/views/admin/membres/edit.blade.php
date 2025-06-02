@@ -11,11 +11,11 @@
                 <p class="text-gray-300">{{ $membre->prenom }} {{ $membre->nom }}</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('membres.show', $membre) }}" 
+                <a href="{{ route('admin.membres.show', $membre) }}" 
                    class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
                     <i class="fas fa-eye mr-2"></i>Voir
                 </a>
-                <a href="{{ route('membres.index') }}" 
+                <a href="{{ route('admin.membres.index') }}" 
                    class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
                     <i class="fas fa-arrow-left mr-2"></i>Retour
                 </a>
@@ -34,7 +34,7 @@
         @endif
 
         <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-8">
-            <form method="POST" action="{{ route('membres.update', $membre) }}" class="space-y-8">
+            <form method="POST" action="{{ route('admin.membres.update', $membre) }}" class="space-y-8">
                 @csrf
                 @method('PUT')
 
@@ -91,7 +91,7 @@
 
                 <!-- Boutons d'action -->
                 <div class="flex justify-end space-x-4 pt-6 border-t border-white/20">
-                    <a href="{{ route('membres.show', $membre) }}" 
+                    <a href="{{ route('admin.membres.show', $membre) }}" 
                        class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors">
                         Annuler
                     </a>

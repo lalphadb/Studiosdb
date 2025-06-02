@@ -6,14 +6,14 @@
 <div class="container-fluid px-4">
     <div class="row mb-4">
         <div class="col-12">
-            @include('components.back-button', ['route' => route('cours.index')])
+            @include('components.back-button', ['route' => route('admin.cours.index')])
             <h1 class="h3 text-white mb-0">
                 <i class="fas fa-edit me-2"></i>Modifier le Cours
             </h1>
         </div>
     </div>
 
-    <form action="{{ route('cours.update', $cours) }}" method="POST" id="cours-form">
+    <form action="{{ route('admin.cours.update', $cours) }}" method="POST" id="cours-form">
         @csrf
         @method('PUT')
         
@@ -275,10 +275,10 @@
                         <hr class="text-white-50">
                         
                         <div class="d-grid gap-2">
-                            <a href="{{ route('cours.show', $cours) }}" class="btn btn-sm btn-outline-info">
+                            <a href="{{ route('admin.cours.show', $cours) }}" class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-eye me-2"></i>Voir le cours
                             </a>
-                            <form action="{{ route('cours.toggle-status', $cours) }}" method="POST">
+                            <form action="{{ route('admin.cours.toggle-status', $cours) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="btn btn-sm btn-outline-{{ $cours->actif ? 'warning' : 'success' }} w-100">
@@ -286,7 +286,7 @@
                                 </button>
                             </form>
                             @if($cours->inscriptions->count() == 0)
-                            <form action="{{ route('cours.destroy', $cours) }}" 
+                            <form action="{{ route('admin.cours.destroy', $cours) }}" 
                                   method="POST" 
                                   onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours?')">
                                 @csrf
@@ -311,7 +311,7 @@
                 <button type="submit" class="btn btn-info btn-lg">
                     <i class="fas fa-save me-2"></i>Enregistrer les modifications
                 </button>
-                <a href="{{ route('cours.show', $cours) }}" class="btn btn-secondary btn-lg">
+                <a href="{{ route('admin.cours.show', $cours) }}" class="btn btn-secondary btn-lg">
                     <i class="fas fa-times me-2"></i>Annuler
                 </a>
             </div>

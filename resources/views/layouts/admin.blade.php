@@ -415,6 +415,15 @@
     
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('css/studiosdb-glassmorphic-complete.css') }}">
+<style>
+    /* Fix pour empêcher l expansion infinie */
+    body { overflow: hidden; }
+    .admin-main { overflow-y: auto; max-height: 100vh; }
+    .content-area { min-height: auto !important; }
+    .theta-content { min-height: auto !important; }
+</style>
+<link rel="stylesheet" href="{{ asset('css/dashboard-fix.css') }}">
+<link rel="stylesheet" href="{{ asset('css/dashboard-final.css') }}">
 </head>
 <body>
     <div class="theta-wrapper">
@@ -436,43 +445,43 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('membres.index') }}" class="nav-link">
+                        <a href="{{ route('admin.membres.index') }}" class="nav-link">
                             <i class="bi bi-people nav-icon"></i>
                             <span>Membres</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('cours.index') }}" class="nav-link">
+                        <a href="{{ route('admin.cours.index') }}" class="nav-link">
                             <i class="bi bi-calendar3 nav-icon"></i>
                             <span>Cours</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('ecoles.index') }}" class="nav-link">
+                        <a href="{{ route('admin.ecoles.index') }}" class="nav-link">
                             <i class="bi bi-building nav-icon"></i>
                             <span>Écoles</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('sessions.index') }}" class="nav-link">
+                        <a href="{{ route('admin.sessions.index') }}" class="nav-link">
                             <i class="bi bi-calendar-range nav-icon"></i>
                             <span>Sessions</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('presences.index') }}" class="nav-link">
+                        <a href="{{ route('admin.presences.index') }}" class="nav-link">
                             <i class="bi bi-check-circle nav-icon"></i>
                             <span>Présences</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('inscriptions.index') }}" class="nav-link">
+                        <a href="{{ route('admin.inscriptions.index') }}" class="nav-link">
                             <i class="bi bi-person-plus nav-icon"></i>
                             <span>Inscriptions</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('seminaires.index') }}" class="nav-link">
+                        <a href="{{ route('admin.seminaires.index') }}" class="nav-link">
                             <i class="bi bi-mortarboard nav-icon"></i>
                             <span>Séminaires</span>
                         </a>
@@ -544,11 +553,13 @@
 
                 @yield('content')
             </div>
+            <footer class="admin-footer mt-auto">
+                <p class="mb-0">© {{ date('Y') }} Studios Unis - Conformité Loi 25 du Québec</p>
+            </footer>
         </main>
     </div>
 
     <!-- Footer -->
-    @include('components.footer-loi25')
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

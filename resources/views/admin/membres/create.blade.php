@@ -10,7 +10,7 @@
                 <h1 class="text-3xl font-bold text-white mb-2">Nouveau Membre</h1>
                 <p class="text-gray-300">Ajoutez un nouveau membre à l'école</p>
             </div>
-            <a href="{{ route('membres.index') }}" 
+            <a href="{{ route('admin.membres.index') }}" 
                class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
                 <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
             </a>
@@ -28,7 +28,7 @@
         @endif
 
         <div class="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-8">
-            <form method="POST" action="{{ route('membres.store') }}" class="space-y-8">
+            <form method="POST" action="{{ route('admin.membres.store') }}" class="space-y-8">
                 @csrf
 
                 <!-- Informations personnelles -->
@@ -206,7 +206,7 @@
 
                 <!-- Boutons d'action -->
                 <div class="flex justify-end space-x-4 pt-6 border-t border-white/20">
-                    <a href="{{ route('membres.index') }}" 
+                    <a href="{{ route('admin.membres.index') }}" 
                        class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors">
                         Annuler
                     </a>

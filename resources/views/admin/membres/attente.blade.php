@@ -7,7 +7,7 @@
     <div class="text-center py-5">
         <h2 class="text-white mb-3">Membres en Attente d'Approbation</h2>
         <p class="text-light">Cette page est en cours de développement.</p>
-        <a href="{{ route('membres.index') }}" class="btn btn-primary">
+        <a href="{{ route('admin.membres.index') }}" class="btn btn-primary">
             <i class="fas fa-arrow-left me-2"></i>
             Retour à la liste
         </a>
