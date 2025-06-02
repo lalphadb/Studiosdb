@@ -1,3 +1,17 @@
+#!/bin/bash
+# apply-dashboard-improvements.sh
+
+echo "🎨 APPLICATION DES MODIFICATIONS APPROUVÉES"
+echo "=========================================="
+
+# 1. Sauvegarder les fichiers originaux
+echo "💾 Sauvegarde des fichiers originaux..."
+cp resources/views/admin/dashboard/superadmin.blade.php resources/views/admin/dashboard/superadmin.blade.php.bak
+cp public/css/studiosdb-glassmorphic-complete.css public/css/studiosdb-glassmorphic-complete.css.bak
+
+# 2. Modifier la vue superadmin avec les nouvelles icônes et animations
+echo "📝 Mise à jour de la vue superadmin..."
+cat > resources/views/admin/dashboard/superadmin.blade.php << 'EOF'
 @extends('layouts.admin')
 
 @section('title', 'Tableau de bord Super Admin')
@@ -315,3 +329,118 @@ new Chart(ctx, {
 </style>
 @endpush
 @endsection
+EOF
+
+# 3. Ajouter les animations au CSS principal
+echo "🎨 Ajout des animations CSS..."
+cat >> public/css/studiosdb-glassmorphic-complete.css << 'EOF'
+
+/* ========================================
+   ANIMATIONS DASHBOARD APPROUVÉES
+   ======================================== */
+
+/* Animations des cartes dashboard */
+.stat-card-modern {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.stat-card-modern:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.3),
+        0 0 30px rgba(255,255,255,0.1) !important;
+}
+
+.stat-icon {
+    transition: transform 0.3s ease !important;
+}
+
+.stat-card-modern:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg) !important;
+}
+
+/* Amélioration de la visibilité */
+.stat-value {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+.content-card {
+    background: rgba(255,255,255,0.04) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.content-card:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+}
+
+/* Animation de pulsation pour les notifications */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Centrage de la sidebar */
+.theta-sidebar .nav-menu {
+    padding: 20px 10px !important;
+}
+
+.theta-sidebar .nav-item {
+    margin: 5px 10px !important;
+}
+
+/* Effet glow au hover */
+.stat-card-modern:hover .stat-value {
+    text-shadow: 
+        0 0 20px rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* Amélioration des liens */
+.stat-footer a:hover {
+    transform: translateX(5px);
+}
+
+/* Amélioration des actions rapides */
+.action-btn {
+    transition: all 0.3s ease !important;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px) !important;
+}
+EOF
+
+# 4. Appliquer les mêmes améliorations à la vue admin école
+echo "🏫 Amélioration de la vue admin école..."
+sed -i 's|style="background: rgba(255,255,255,0.05);|style="background: rgba(255,255,255,0.05); transition: all 0.3s ease; cursor: pointer;"|g' resources/views/admin/dashboard/ecole.blade.php
+sed -i 's|<div style="background: rgba(16,185,129,0.2); color: #10b981;|<div style="background: linear-gradient(135deg, #10b981, #3b82f6); color: white;|g' resources/views/admin/dashboard/ecole.blade.php
+sed -i 's|<div style="background: rgba(59,130,246,0.2); color: #3b82f6;|<div style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white;|g' resources/views/admin/dashboard/ecole.blade.php
+sed -i 's|<div style="background: rgba(139,92,246,0.2); color: #8b5cf6;|<div style="background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white;|g' resources/views/admin/dashboard/ecole.blade.php
+sed -i 's|<div style="background: rgba(245,158,11,0.2); color: #f59e0b;|<div style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white;|g' resources/views/admin/dashboard/ecole.blade.php
+
+# 5. Corriger les permissions
+echo "🔐 Correction des permissions..."
+chown -R lalpha:www-data resources/views/admin/dashboard/
+chown -R lalpha:www-data public/css/
+chmod -R 755 resources/views/admin/dashboard/
+chmod -R 755 public/css/
+
+# 6. Vider le cache
+echo "🧹 Nettoyage du cache..."
+php artisan cache:clear
+php artisan view:clear
+php artisan config:clear
+
+echo "✅ Modifications appliquées avec succès !"
+echo ""
+echo "🎨 AMÉLIORATIONS APPLIQUÉES :"
+echo "- ✅ Icônes avec gradients colorés au lieu de carrés"
+echo "- ✅ Animations au survol des cartes"
+echo "- ✅ Effet de rotation sur les icônes"
+echo "- ✅ Ombres et effet glow"
+echo "- ✅ Meilleure visibilité avec text-shadow"
+echo "- ✅ Animations des éléments interactifs"
+echo ""
+echo "🔄 Rafraîchissez la page pour voir les changements !"

@@ -140,7 +140,7 @@
         }
         
         .nav-item {
-            margin-bottom: 5px;
+            margin: 5px 10px;
         }
         
         .nav-link {
@@ -388,7 +388,7 @@
             font-size: 36px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 5px;
+            margin: 5px 10px;
         }
         
         .stat-label {
@@ -489,22 +489,29 @@
                 </ul>
             </nav>
             
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        {{ substr(auth()->user()->name ?? 'User', 0, 2) }}
-                    </div>
-                    <div class="user-info">
-                        <div class="user-name">{{ auth()->user()->name ?? 'Bobby Dios' }}</div>
-                        <div class="user-status">
-                            <span class="status-dot" style="display: inline-block; width: 6px; height: 6px; background: #00ff88; border-radius: 50%; margin-right: 5px;"></span>
-                            En ligne
+            <div class="sidebar-footer" style="padding: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div class="user-profile" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px; margin-bottom: 10px; transition: all 0.3s ease;"
+                     onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.2)'" 
+                     onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="width: 45px; height: 45px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; font-size: 16px; box-shadow: 0 4px 15px rgba(139,92,246,0.3);">
+                            {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #ffffff; font-size: 14px;">{{ auth()->user()->name ?? 'Utilisateur' }}</div>
+                            <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px rgba(16,185,129,0.5);"></span>
+                                <span style="font-size: 12px; color: #8b92a3;">En ligne</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <form method="POST" action="{{ route('logout') }}" style="margin-top: 10px;">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" style="width: 100%; padding: 10px; background: rgba(255, 0, 128, 0.1); border: 1px solid rgba(255, 0, 128, 0.3); color: #ff0080; border-radius: 8px; cursor: pointer;">
+                    <button type="submit" style="width: 100%; padding: 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #ef4444; border-radius: 10px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                            onmouseover="this.style.background='rgba(239,68,68,0.2)'; this.style.borderColor='rgba(239,68,68,0.3)'; this.style.transform='translateY(-2px)'" 
+                            onmouseout="this.style.background='rgba(239,68,68,0.1)'; this.style.borderColor='rgba(239,68,68,0.2)'; this.style.transform='translateY(0)'">
+                        <i class="bi bi-box-arrow-right"></i>
                         Déconnexion
                     </button>
                 </form>

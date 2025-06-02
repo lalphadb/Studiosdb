@@ -1,3 +1,16 @@
+#!/bin/bash
+# improve-ecole-dashboard.sh
+
+echo "🏫 AMÉLIORATION DU DASHBOARD ADMIN ÉCOLE"
+echo "========================================"
+
+# 1. Sauvegarder l'original
+echo "💾 Sauvegarde du fichier original..."
+cp resources/views/admin/dashboard/ecole.blade.php resources/views/admin/dashboard/ecole.blade.php.bak
+
+# 2. Recréer la vue avec le même style que superadmin
+echo "📝 Mise à jour complète du dashboard école..."
+cat > resources/views/admin/dashboard/ecole.blade.php << 'EOF'
 @extends('layouts.admin')
 
 @section('title', 'Tableau de bord')
@@ -316,3 +329,26 @@ document.querySelectorAll('.stat-card-modern').forEach(card => {
 </style>
 @endpush
 @endsection
+EOF
+
+# 3. Permissions
+echo "🔐 Correction des permissions..."
+chown -R lalpha:www-data resources/views/admin/dashboard/
+chmod -R 755 resources/views/admin/dashboard/
+
+# 4. Vider le cache
+echo "🧹 Nettoyage du cache..."
+php artisan cache:clear
+php artisan view:clear
+
+echo "✅ Dashboard admin école amélioré avec succès !"
+echo ""
+echo "🎨 AMÉLIORATIONS APPLIQUÉES :"
+echo "- ✅ Cartes avec icônes gradient colorées"
+echo "- ✅ Animations au survol identiques au superadmin"
+echo "- ✅ Actions rapides avec gradients"
+echo "- ✅ Sections Sessions et Membres en attente"
+echo "- ✅ Design glassmorphique cohérent"
+echo "- ✅ Effets hover sur tous les éléments"
+echo ""
+echo "🔄 Le dashboard admin école a maintenant le même niveau de qualité que le superadmin !"
