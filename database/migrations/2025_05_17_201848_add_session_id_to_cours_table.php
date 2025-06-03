@@ -9,20 +9,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cours', function (Blueprint $table) {
-            $table->foreignId('session_id')
-                ->nullable()
-                ->after('ecole_id')
-                ->constrained('cours_sessions')
-                ->onDelete('cascade');
+            // Ajouter ecole_id si elle n'existe pas
+            if (!Schema::hasColumn('cours', 'ecole_id')) {
+                $table->foreignId('ecole_id')->nullable()->constrained('ecoles')->onDelete('cascade');
+            }
+            
+            // Ajouter session_id si elle n'existe pas
+            if (!Schema::hasColumn('cours', 'session_id')) {
+                $table->foreignId('session_id')->nullable()->constrained('cours_sessions')->onDelete('set null');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('cours', function (Blueprint $table) {
-            $table->dropForeign(['session_id']);
-            $table->dropColumn('session_id');
+            if (Schema::hasColumn('cours', 'session_id')) {
+                $table->dropForeign(['session_id']);
+                $table->dropColumn('session_id');
+            }
         });
     }
 };
-

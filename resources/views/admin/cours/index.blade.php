@@ -3,156 +3,192 @@
 @section('title', 'Gestion des Cours')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <h1 class="h3 text-white mb-0">
-                    <i class="fas fa-chalkboard-teacher me-2"></i>Gestion des Cours
-                </h1>
-                <a href="{{ route('admin.cours.create') }}" class="btn btn-info">
-                    <i class="fas fa-plus me-2"></i>Nouveau Cours
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="glass-card p-6 mb-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Gestion des Cours</h1>
+                    <p class="text-gray-400 mt-2">Gérez les cours de karaté</p>
+                </div>
+                <a href="{{ route('admin.cours.create') }}" 
+                   class="glass-button bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400">
+                    <i class="fas fa-plus mr-2"></i>
+                    Nouveau Cours
                 </a>
             </div>
         </div>
-    </div>
 
-    @include('components.alerts')
+        <!-- Filtres -->
+        <div class="glass-card p-6 mb-6">
+            <form method="GET" action="{{ route('admin.cours.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Recherche -->
+                    <div>
+                        <input type="text" 
+                               name="search" 
+                               value="{{ request('search') }}"
+                               placeholder="Rechercher un cours..."
+                               class="glass-input w-full">
+                    </div>
 
-    <!-- Statistiques -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card bg-dark text-white border-info" style="backdrop-filter: blur(10px); background: rgba(0,150,255,0.1);">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h6 class="text-muted mb-1">Total Cours</h6>
-                            <h3 class="mb-0">{{ $cours->total() }}</h3>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-book fa-2x text-info"></i>
-                        </div>
+                    <!-- Type -->
+                    <div>
+                        <select name="type" class="glass-input w-full">
+                            <option value="">Tous les types</option>
+                            <option value="enfant" {{ request('type') == 'enfant' ? 'selected' : '' }}>Enfant</option>
+                            <option value="adulte" {{ request('type') == 'adulte' ? 'selected' : '' }}>Adulte</option>
+                            <option value="mixte" {{ request('type') == 'mixte' ? 'selected' : '' }}>Mixte</option>
+                        </select>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-dark text-white border-success" style="backdrop-filter: blur(10px); background: rgba(0,255,0,0.1);">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h6 class="text-muted mb-1">Cours Actifs</h6>
-                            <h3 class="mb-0">{{ $cours->where('actif', true)->count() }}</h3>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-check-circle fa-2x text-success"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-dark text-white border-warning" style="backdrop-filter: blur(10px); background: rgba(255,200,0,0.1);">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h6 class="text-muted mb-1">Sessions</h6>
-                            <h3 class="mb-0">{{ $sessions->count() }}</h3>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-calendar-alt fa-2x text-warning"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-dark text-white border-secondary" style="backdrop-filter: blur(10px); background: rgba(150,150,150,0.1);">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h6 class="text-muted mb-1">Cours/Semaine</h6>
-                            <h3 class="mb-0">
-                                @php
-                                    $totalHoraires = 0;
-                                    foreach($cours as $c) {
-                                        if($c->actif) {
-                                            $totalHoraires += $c->horaires->count();
-                                        }
-                                    }
-                                @endphp
-                                {{ $totalHoraires }}
-                            </h3>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-clock fa-2x text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Filtres -->
-    <div class="card bg-dark text-white mb-4" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-        <div class="card-body">
-            <form method="GET" action="{{ route('admin.cours.index') }}" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label small text-muted">Session</label>
-                    <select name="session_id" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;">
-                        <option value="">Toutes les sessions</option>
-                        @foreach($sessions as $session)
-                            <option value="{{ $session->id }}" {{ request('session_id') == $session->id ? 'selected' : '' }}>
-                                {{ $session->nom }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <!-- Session -->
+                    <div>
+                        <select name="session_id" class="glass-input w-full">
+                            <option value="">Toutes les sessions</option>
+                            @foreach($sessions as $session)
+                                <option value="{{ $session->id }}" {{ request('session_id') == $session->id ? 'selected' : '' }}>
+                                    {{ $session->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Statut -->
+                    <div>
+                        <select name="actif" class="glass-input w-full">
+                            <option value="">Tous les statuts</option>
+                            <option value="1" {{ request('actif') == '1' ? 'selected' : '' }}>Actif</option>
+                            <option value="0" {{ request('actif') == '0' ? 'selected' : '' }}>Inactif</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label small text-muted">Statut</label>
-                    <select name="actif" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;">
-                        <option value="">Tous les statuts</option>
-                        <option value="1" {{ request('actif') === '1' ? 'selected' : '' }}>Actifs uniquement</option>
-                        <option value="0" {{ request('actif') === '0' ? 'selected' : '' }}>Inactifs uniquement</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label small text-muted">Vue</label>
-                    <select name="view" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;">
-                        <option value="cards" {{ request('view', 'cards') == 'cards' ? 'selected' : '' }}>Vue cartes</option>
-                        <option value="calendar" {{ request('view') == 'calendar' ? 'selected' : '' }}>Vue calendrier</option>
-                        <option value="list" {{ request('view') == 'list' ? 'selected' : '' }}>Vue liste</option>
-                    </select>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-info me-2">
-                        <i class="fas fa-filter me-2"></i>Filtrer
+
+                <div class="flex gap-2">
+                    <button type="submit" class="glass-button bg-blue-600/20 hover:bg-blue-600/30 text-blue-400">
+                        <i class="fas fa-search mr-2"></i>Filtrer
                     </button>
-                    <a href="{{ route('admin.cours.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times me-2"></i>Réinitialiser
+                    <a href="{{ route('admin.cours.index') }}" class="glass-button">
+                        <i class="fas fa-times mr-2"></i>Réinitialiser
                     </a>
                 </div>
             </form>
         </div>
-    </div>
 
-    @php
-        $viewType = request('view', 'cards');
-    @endphp
+        <!-- Liste des cours -->
+        <div class="glass-card">
+            @if($cours->count() > 0)
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left p-4 text-gray-400">Nom</th>
+                                <th class="text-left p-4 text-gray-400">Type</th>
+                                <th class="text-left p-4 text-gray-400">École</th>
+                                <th class="text-left p-4 text-gray-400">Horaires</th>
+                                <th class="text-left p-4 text-gray-400">Capacité</th>
+                                <th class="text-left p-4 text-gray-400">Statut</th>
+                                <th class="text-right p-4 text-gray-400">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($cours as $cour)
+                                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                    <td class="p-4">
+                                        <div>
+                                            <div class="font-medium text-white">{{ $cour->nom }}</div>
+                                            <div class="text-sm text-gray-400">{{ $cour->type_cours }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {{ $cour->type == 'enfant' ? 'bg-blue-500/20 text-blue-400' : '' }}
+                                            {{ $cour->type == 'adulte' ? 'bg-purple-500/20 text-purple-400' : '' }}
+                                            {{ $cour->type == 'mixte' ? 'bg-green-500/20 text-green-400' : '' }}">
+                                            {{ ucfirst($cour->type) }}
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-gray-300">{{ $cour->ecole->nom }}</td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-gray-400">
+                                            @foreach($cour->horaires as $horaire)
+                                                <div>{{ ucfirst($horaire->jour) }} {{ $horaire->heure_debut }} - {{ $horaire->heure_fin }}</div>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-300">
+                                        <span class="text-white">{{ $cour->inscriptions_count ?? 0 }}</span> / {{ $cour->capacite_max }}
+                                    </td>
+                                    <td class="p-4">
+                                        @if($cour->actif)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                                Actif
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-400">
+                                                Inactif
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="{{ route('admin.cours.show', $cour) }}" 
+                                               class="text-blue-400 hover:text-blue-300 transition-colors"
+                                               title="Voir">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.cours.edit', $cour) }}" 
+                                               class="text-yellow-400 hover:text-yellow-300 transition-colors"
+                                               title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('admin.cours.duplicate', $cour) }}" 
+                                                  method="POST" 
+                                                  class="inline">
+                                                @csrf
+                                                <button type="submit" 
+                                                        class="text-purple-400 hover:text-purple-300 transition-colors"
+                                                        title="Dupliquer">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.cours.destroy', $cour) }}" 
+                                                  method="POST" 
+                                                  class="inline"
+                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="text-red-400 hover:text-red-300 transition-colors"
+                                                        title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-    @if($viewType == 'calendar')
-        <!-- Vue Calendrier par jour -->
-        @include('admin.cours.partials.calendar-view', ['cours' => $cours])
-    @elseif($viewType == 'list')
-        <!-- Vue Liste -->
-        @include('admin.cours.partials.list-view', ['cours' => $cours])
-    @else
-        <!-- Vue Cartes (par défaut) -->
-        @include('admin.cours.partials.cards-view', ['cours' => $cours])
-    @endif
-    
-    <div class="mt-4">
-        {{ $cours->appends(request()->query())->links('pagination::bootstrap-5') }}
+                <!-- Pagination -->
+                <div class="p-4">
+                    {{ $cours->links() }}
+                </div>
+            @else
+                <div class="p-8 text-center">
+                    <i class="fas fa-chalkboard-teacher text-6xl text-gray-600 mb-4"></i>
+                    <p class="text-gray-400">Aucun cours trouvé</p>
+                    <a href="{{ route('admin.cours.create') }}" 
+                       class="glass-button bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400 mt-4 inline-block">
+                        <i class="fas fa-plus mr-2"></i>
+                        Créer le premier cours
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Cours extends Model
 {
@@ -17,79 +19,48 @@ class Cours extends Model
         'description',
         'ecole_id',
         'session_id',
-        'date_debut',
-        'date_fin',
-        'places_max',
-        'tarification_info',
+        'type_cours',
+        'type',
+        'capacite_max',
+        'duree_minutes',
+        'jours',
         'actif'
     ];
 
     protected $casts = [
-        'date_debut' => 'date',
-        'date_fin' => 'date',
+        'jours' => 'array',
         'actif' => 'boolean',
-        'places_max' => 'integer'
     ];
 
-    // Relations
-    public function ecole()
+    public function ecole(): BelongsTo
     {
         return $this->belongsTo(Ecole::class);
     }
 
-    public function session()
+    public function session(): BelongsTo
     {
         return $this->belongsTo(CoursSession::class, 'session_id');
     }
 
-    public function horaires()
+    public function horaires(): HasMany
     {
         return $this->hasMany(CoursHoraire::class);
     }
 
-    public function inscriptions()
+    public function inscriptions(): HasMany
     {
         return $this->hasMany(InscriptionCours::class);
     }
 
-    public function presences()
+    public function membres(): BelongsToMany
+    {
+        return $this->belongsToMany(Membre::class, 'inscriptions_cours')
+                    ->withPivot('date_inscription', 'statut')
+                    ->withTimestamps();
+    }
+
+    public function presences(): HasMany
     {
         return $this->hasMany(Presence::class);
-    }
-
-    // Accesseurs pour les dates formatées
-    public function getDateDebutFormatAttribute()
-    {
-        return $this->date_debut ? Carbon::parse($this->date_debut)->format('d/m/Y') : null;
-    }
-
-    public function getDateFinFormatAttribute()
-    {
-        return $this->date_fin ? Carbon::parse($this->date_fin)->format('d/m/Y') : null;
-    }
-
-    // Accesseur pour les places disponibles
-    public function getPlacesDisponiblesAttribute()
-    {
-        if (!$this->places_max) {
-            return null;
-        }
-        $inscrites = $this->inscriptions()->where('statut', 'confirmee')->count();
-        return max(0, $this->places_max - $inscrites);
-    }
-
-    // Méthode pour dupliquer un cours
-    public function duplicate()
-    {
-        $newCours = $this->replicate();
-        $newCours->nom = $this->nom . ' (Copie)';
-        $newCours->save();
-        
-        // Dupliquer les horaires
-        foreach ($this->horaires as $horaire) {
-            $newCours->horaires()->create($horaire->toArray());
-        }
-        
-        return $newCours;
     }
 }

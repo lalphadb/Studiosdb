@@ -127,3 +127,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         })->name('maintenance');
     });
 });
+
+// Module Cours
+Route::resource('cours', CoursController::class);
+Route::post('cours/{cours}/duplicate', [CoursController::class, 'duplicate'])->name('cours.duplicate');
+

@@ -3,460 +3,351 @@
 @section('title', 'Modifier le Cours')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            @include('components.back-button', ['route' => route('admin.cours.index')])
-            <h1 class="h3 text-white mb-0">
-                <i class="fas fa-edit me-2"></i>Modifier le Cours
-            </h1>
-        </div>
-    </div>
-
-    <form action="{{ route('admin.cours.update', $cours) }}" method="POST" id="cours-form">
-        @csrf
-        @method('PUT')
-        
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Informations de base -->
-                <div class="card bg-dark text-white mb-4" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                    <div class="card-header" style="background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(70,130,180,0.1) 100%);">
-                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations du cours</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label for="nom" class="form-label">Nom du cours *</label>
-                                <input type="text" 
-                                       class="form-control bg-dark text-white @error('nom') is-invalid @enderror" 
-                                       style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                       id="nom" 
-                                       name="nom" 
-                                       value="{{ old('nom', $cours->nom) }}" 
-                                       required>
-                                @error('nom')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-4 mb-3">
-                                <label for="places_max" class="form-label">Places maximum</label>
-                                <input type="number" 
-                                       class="form-control bg-dark text-white @error('places_max') is-invalid @enderror" 
-                                       style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                       id="places_max" 
-                                       name="places_max" 
-                                       value="{{ old('places_max', $cours->places_max) }}" 
-                                       min="1">
-                                @error('places_max')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description du cours</label>
-                            <textarea class="form-control bg-dark text-white @error('description') is-invalid @enderror" 
-                                      style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                      id="description" 
-                                      name="description" 
-                                      rows="3">{{ old('description', $cours->description) }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        
-                        <div class="row">
-                            @if(count($ecoles) > 1)
-                            <div class="col-md-4 mb-3">
-                                <label for="ecole_id" class="form-label">École *</label>
-                                <select class="form-select bg-dark text-white @error('ecole_id') is-invalid @enderror" 
-                                        style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                        id="ecole_id" 
-                                        name="ecole_id" 
-                                        required>
-                                    @foreach($ecoles as $ecole)
-                                        <option value="{{ $ecole->id }}" {{ old('ecole_id', $cours->ecole_id) == $ecole->id ? 'selected' : '' }}>
-                                            {{ $ecole->nom }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('ecole_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            @else
-                            <input type="hidden" name="ecole_id" value="{{ $cours->ecole_id }}">
-                            @endif
-                            
-                            <div class="col-md-{{ count($ecoles) > 1 ? '4' : '6' }} mb-3">
-                                <label for="session_id" class="form-label">Session *</label>
-                                <select class="form-select bg-dark text-white @error('session_id') is-invalid @enderror" 
-                                        style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                        id="session_id" 
-                                        name="session_id"
-                                        required>
-                                    @foreach($sessions as $session)
-                                        <option value="{{ $session->id }}" 
-                                                {{ old('session_id', $cours->session_id) == $session->id ? 'selected' : '' }}
-                                                style="color: {{ $session->couleur }};">
-                                            {{ $session->nom }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('session_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-{{ count($ecoles) > 1 ? '4' : '6' }} mb-3">
-                                <label for="date_debut" class="form-label">Date début * (JJ/MM/AAAA)</label>
-                                <input type="text" 
-                                       class="form-control bg-dark text-white @error('date_debut') is-invalid @enderror" 
-                                       style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                       id="date_debut" 
-                                       name="date_debut" 
-                                       value="{{ old('date_debut', $cours->date_debut_format) }}" 
-                                       placeholder="31/05/2025"
-                                       pattern="\d{2}/\d{2}/\d{4}"
-                                       required>
-                                @error('date_debut')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <small class="text-muted">Format: JJ/MM/AAAA</small>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="tarification_info" class="form-label">Information de tarification (optionnel)</label>
-                            <textarea class="form-control bg-dark text-white @error('tarification_info') is-invalid @enderror" 
-                                      style="background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2);"
-                                      id="tarification_info" 
-                                      name="tarification_info" 
-                                      rows="2">{{ old('tarification_info', $cours->tarification_info) }}</textarea>
-                            @error('tarification_info')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Horaires -->
-                <div class="card bg-dark text-white" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                    <div class="card-header" style="background: linear-gradient(135deg, rgba(70,130,180,0.1) 0%, rgba(184,115,51,0.1) 100%);">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Horaires du cours</h5>
-                            <button type="button" class="btn btn-sm btn-info" id="add-horaire">
-                                <i class="fas fa-plus me-1"></i>Ajouter un horaire
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="horaires-container">
-                            @forelse($cours->horaires as $index => $horaire)
-                            <div class="horaire-item mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                                <div class="row align-items-center">
-                                    <div class="col-md-3">
-                                        <select name="horaires[{{ $index }}][jour]" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;" required>
-                                            <option value="">Jour</option>
-                                            @foreach($jours as $jour => $label)
-                                                <option value="{{ $jour }}" {{ $horaire->jour == $jour ? 'selected' : '' }}>{{ $label }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="small text-muted">Heure début (24h)</label>
-                                        <input type="text" 
-                                               name="horaires[{{ $index }}][heure_debut]" 
-                                               class="form-control bg-dark text-white timepicker" 
-                                               style="background: rgba(255,255,255,0.1) !important;"
-                                               value="{{ $horaire->heure_debut_format }}"
-                                               pattern="[0-2][0-9]:[0-5][0-9]"
-                                               required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="small text-muted">Heure fin (24h)</label>
-                                        <input type="text" 
-                                               name="horaires[{{ $index }}][heure_fin]" 
-                                               class="form-control bg-dark text-white timepicker" 
-                                               style="background: rgba(255,255,255,0.1) !important;"
-                                               value="{{ $horaire->heure_fin_format }}"
-                                               pattern="[0-2][0-9]:[0-5][0-9]"
-                                               required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="small text-muted">&nbsp;</label>
-                                        <div>
-                                            <button type="button" class="btn btn-success btn-sm copy-horaire" title="Copier cet horaire">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-horaire" {{ $loop->first && $loop->count == 1 ? 'style=display:none;' : '' }}>
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @empty
-                            <div class="horaire-item mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                                <div class="row align-items-center">
-                                    <div class="col-md-3">
-                                        <select name="horaires[0][jour]" class="form-select bg-dark text-white" style="background: rgba(255,255,255,0.1) !important;" required>
-                                            <option value="">Jour</option>
-                                            @foreach($jours as $jour => $label)
-                                                <option value="{{ $jour }}">{{ $label }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="small text-muted">Heure début (24h)</label>
-                                        <input type="text" 
-                                               name="horaires[0][heure_debut]" 
-                                               class="form-control bg-dark text-white timepicker" 
-                                               style="background: rgba(255,255,255,0.1) !important;"
-                                               placeholder="18:00"
-                                               pattern="[0-2][0-9]:[0-5][0-9]"
-                                               required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="small text-muted">Heure fin (24h)</label>
-                                        <input type="text" 
-                                               name="horaires[0][heure_fin]" 
-                                               class="form-control bg-dark text-white timepicker" 
-                                               style="background: rgba(255,255,255,0.1) !important;"
-                                               placeholder="19:00"
-                                               pattern="[0-2][0-9]:[0-5][0-9]"
-                                               required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="small text-muted">&nbsp;</label>
-                                        <div>
-                                            <button type="button" class="btn btn-success btn-sm copy-horaire" title="Copier cet horaire">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-horaire" style="display:none;">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card bg-dark text-white sticky-top" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); top: 1rem;">
-                    <div class="card-header" style="background: rgba(255,255,255,0.05);">
-                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations</h5>
-                    </div>
-                    <div class="card-body">
-                        <dl class="row small mb-0">
-                            <dt class="col-sm-6">Créé le :</dt>
-                            <dd class="col-sm-6">{{ $cours->created_at->format('d/m/Y H:i') }}</dd>
-                            
-                            <dt class="col-sm-6">Modifié le :</dt>
-                            <dd class="col-sm-6">{{ $cours->updated_at->format('d/m/Y H:i') }}</dd>
-                            
-                            <dt class="col-sm-6">Inscrits :</dt>
-                            <dd class="col-sm-6">{{ $cours->inscriptions->count() }} membres</dd>
-                            
-                            <dt class="col-sm-6">Statut :</dt>
-                            <dd class="col-sm-6">
-                                <span class="badge bg-{{ $cours->actif ? 'success' : 'secondary' }}">
-                                    {{ $cours->actif ? 'Actif' : 'Inactif' }}
-                                </span>
-                            </dd>
-                        </dl>
-                        
-                        <hr class="text-white-50">
-                        
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.cours.show', $cours) }}" class="btn btn-sm btn-outline-info">
-                                <i class="fas fa-eye me-2"></i>Voir le cours
-                            </a>
-                            <form action="{{ route('admin.cours.toggle-status', $cours) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-sm btn-outline-{{ $cours->actif ? 'warning' : 'success' }} w-100">
-                                    <i class="fas fa-power-off me-2"></i>{{ $cours->actif ? 'Désactiver' : 'Activer' }}
-                                </button>
-                            </form>
-                            @if($cours->inscriptions->count() == 0)
-                            <form action="{{ route('admin.cours.destroy', $cours) }}" 
-                                  method="POST" 
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce cours?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                    <i class="fas fa-trash me-2"></i>Supprimer
-                                </button>
-                            </form>
-                            @else
-                            <button class="btn btn-sm btn-outline-danger w-100" disabled>
-                                <i class="fas fa-trash me-2"></i>Supprimer ({{ $cours->inscriptions->count() }} inscrits)
-                            </button>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mt-3">
-            <div class="col-12">
-                <button type="submit" class="btn btn-info btn-lg">
-                    <i class="fas fa-save me-2"></i>Enregistrer les modifications
-                </button>
-                <a href="{{ route('admin.cours.show', $cours) }}" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-times me-2"></i>Annuler
+<div class="min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="glass-card p-6 mb-6">
+            <div class="flex items-center">
+                <a href="{{ route('admin.cours.show', $cours) }}" 
+                   class="glass-button mr-4">
+                    <i class="fas fa-arrow-left"></i>
                 </a>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Modifier le Cours</h1>
+                    <p class="text-gray-400 mt-2">{{ $cours->nom }}</p>
+                </div>
             </div>
         </div>
-    </form>
+
+        <!-- Formulaire -->
+        <form action="{{ route('admin.cours.update', $cours) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <!-- Informations générales -->
+            <div class="glass-card p-6 mb-6">
+                <h2 class="text-xl font-semibold text-white mb-4">Informations générales</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Nom -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Nom du cours <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" 
+                               name="nom" 
+                               value="{{ old('nom', $cours->nom) }}"
+                               class="glass-input w-full @error('nom') border-red-500 @enderror"
+                               required>
+                        @error('nom')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Type de cours -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Type de cours <span class="text-red-400">*</span>
+                        </label>
+                        <select name="type_cours" 
+                                class="glass-input w-full @error('type_cours') border-red-500 @enderror"
+                                required>
+                            <option value="regulier" {{ old('type_cours', $cours->type_cours) == 'regulier' ? 'selected' : '' }}>Régulier</option>
+                            <option value="parent_enfant" {{ old('type_cours', $cours->type_cours) == 'parent_enfant' ? 'selected' : '' }}>Parent-Enfant</option>
+                            <option value="ceinture_avancee" {{ old('type_cours', $cours->type_cours) == 'ceinture_avancee' ? 'selected' : '' }}>Ceinture Avancée</option>
+                            <option value="competition" {{ old('type_cours', $cours->type_cours) == 'competition' ? 'selected' : '' }}>Compétition</option>
+                            <option value="prive" {{ old('type_cours', $cours->type_cours) == 'prive' ? 'selected' : '' }}>Privé</option>
+                        </select>
+                        @error('type_cours')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Catégorie <span class="text-red-400">*</span>
+                        </label>
+                        <select name="type" 
+                                class="glass-input w-full @error('type') border-red-500 @enderror"
+                                required>
+                            <option value="enfant" {{ old('type', $cours->type) == 'enfant' ? 'selected' : '' }}>Enfant</option>
+                            <option value="adulte" {{ old('type', $cours->type) == 'adulte' ? 'selected' : '' }}>Adulte</option>
+                            <option value="mixte" {{ old('type', $cours->type) == 'mixte' ? 'selected' : '' }}>Mixte</option>
+                        </select>
+                        @error('type')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- École (lecture seule) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            École
+                        </label>
+                        <input type="text" 
+                               value="{{ $cours->ecole->nom }}"
+                               class="glass-input w-full opacity-50"
+                               disabled>
+                    </div>
+
+                    <!-- Session -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Session
+                        </label>
+                        <select name="session_id" 
+                                class="glass-input w-full @error('session_id') border-red-500 @enderror">
+                            <option value="">Aucune session</option>
+                            @foreach($sessions as $session)
+                                <option value="{{ $session->id }}" {{ old('session_id', $cours->session_id) == $session->id ? 'selected' : '' }}>
+                                    {{ $session->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('session_id')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Capacité -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Capacité maximale <span class="text-red-400">*</span>
+                        </label>
+                        <input type="number" 
+                               name="capacite_max" 
+                               value="{{ old('capacite_max', $cours->capacite_max) }}"
+                               min="1"
+                               max="100"
+                               class="glass-input w-full @error('capacite_max') border-red-500 @enderror"
+                               required>
+                        @error('capacite_max')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Durée -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Durée (minutes) <span class="text-red-400">*</span>
+                        </label>
+                        <input type="number" 
+                               name="duree_minutes" 
+                               value="{{ old('duree_minutes', $cours->duree_minutes) }}"
+                               min="30"
+                               max="180"
+                               step="15"
+                               class="glass-input w-full @error('duree_minutes') border-red-500 @enderror"
+                               required>
+                        @error('duree_minutes')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Statut -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                            Statut
+                        </label>
+                        <select name="actif" class="glass-input w-full">
+                            <option value="1" {{ old('actif', $cours->actif) == '1' ? 'selected' : '' }}>Actif</option>
+                            <option value="0" {{ old('actif', $cours->actif) == '0' ? 'selected' : '' }}>Inactif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">
+                        Description
+                    </label>
+                    <textarea name="description" 
+                              rows="3"
+                              class="glass-input w-full @error('description') border-red-500 @enderror">{{ old('description', $cours->description) }}</textarea>
+                    @error('description')
+                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Jours -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">
+                        Jours de la semaine <span class="text-red-400">*</span>
+                    </label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        @php
+                            $selectedJours = old('jours', $cours->jours ?? []);
+                        @endphp
+                        @foreach(['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'] as $jour)
+                            <label class="glass-card p-3 cursor-pointer hover:bg-white/10 transition-colors">
+                                <input type="checkbox" 
+                                       name="jours[]" 
+                                       value="{{ $jour }}"
+                                       {{ in_array($jour, $selectedJours) ? 'checked' : '' }}
+                                       class="mr-2">
+                                <span class="text-white">{{ ucfirst($jour) }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('jours')
+                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Horaires -->
+            <div class="glass-card p-6 mb-6">
+                <h2 class="text-xl font-semibold text-white mb-4">Horaires</h2>
+                
+                <div id="horaires-container">
+                    @forelse($cours->horaires as $index => $horaire)
+                        <div class="horaire-item glass-card p-4 mb-4" data-id="{{ $horaire->id }}">
+                            <input type="hidden" name="horaires[{{ $index }}][id]" value="{{ $horaire->id }}">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Jour</label>
+                                    <select name="horaires[{{ $index }}][jour]" class="glass-input w-full" required>
+                                        @foreach(['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'] as $jour)
+                                            <option value="{{ $jour }}" {{ $horaire->jour == $jour ? 'selected' : '' }}>
+                                                {{ ucfirst($jour) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure début</label>
+                                    <input type="time" 
+                                           name="horaires[{{ $index }}][heure_debut]" 
+                                           value="{{ substr($horaire->heure_debut, 0, 5) }}"
+                                           class="glass-input w-full" 
+                                           required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure fin</label>
+                                    <input type="time" 
+                                           name="horaires[{{ $index }}][heure_fin]" 
+                                           value="{{ substr($horaire->heure_fin, 0, 5) }}"
+                                           class="glass-input w-full" 
+                                           required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Salle</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" 
+                                               name="horaires[{{ $index }}][salle]" 
+                                               value="{{ $horaire->salle }}"
+                                               class="glass-input w-full" 
+                                               placeholder="Dojo 1">
+                                        <button type="button" 
+                                                onclick="removeHoraire(this)" 
+                                                class="glass-button bg-red-600/20 hover:bg-red-600/30 text-red-400">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="horaire-item glass-card p-4 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Jour</label>
+                                    <select name="horaires[0][jour]" class="glass-input w-full" required>
+                                        <option value="">Sélectionner...</option>
+                                        @foreach(['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'] as $jour)
+                                            <option value="{{ $jour }}">{{ ucfirst($jour) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure début</label>
+                                    <input type="time" name="horaires[0][heure_debut]" class="glass-input w-full" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure fin</label>
+                                    <input type="time" name="horaires[0][heure_fin]" class="glass-input w-full" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Salle</label>
+                                    <input type="text" name="horaires[0][salle]" class="glass-input w-full" placeholder="Dojo 1">
+                                </div>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+
+                <button type="button" 
+                        onclick="addHoraire()" 
+                        class="glass-button bg-green-600/20 hover:bg-green-600/30 text-green-400">
+                    <i class="fas fa-plus mr-2"></i>
+                    Ajouter un horaire
+                </button>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-4">
+                <a href="{{ route('admin.cours.show', $cours) }}" 
+                   class="glass-button">
+                    Annuler
+                </a>
+                <button type="submit" 
+                        class="glass-button bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400">
+                    <i class="fas fa-save mr-2"></i>
+                    Enregistrer les modifications
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let horaireIndex = {{ $cours->horaires->count() }};
-    
-    // Fonction pour formater la date
-    function formatDateInput(input) {
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            let formattedValue = '';
-            
-            if (value.length >= 2) {
-                formattedValue = value.slice(0, 2) + '/';
-                if (value.length >= 4) {
-                    formattedValue += value.slice(2, 4) + '/';
-                    if (value.length >= 8) {
-                        formattedValue += value.slice(4, 8);
-                    } else {
-                        formattedValue += value.slice(4);
-                    }
-                } else {
-                    formattedValue += value.slice(2);
-                }
-            } else {
-                formattedValue = value;
-            }
-            
-            e.target.value = formattedValue;
-        });
-    }
-    
-    // Appliquer le formatage au champ date
-    const dateInput = document.getElementById('date_debut');
-    if (dateInput) {
-        formatDateInput(dateInput);
-    }
-    
-    // Fonction pour valider le format d'heure
-    function validateTimeInput(input) {
-        input.addEventListener('blur', function(e) {
-            let value = e.target.value;
-            if (value && !value.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
-                e.target.setCustomValidity('Format invalide. Utilisez HH:MM (ex: 18:00)');
-            } else {
-                e.target.setCustomValidity('');
-            }
-        });
-        
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^\d:]/g, '');
-            if (value.length === 2 && !value.includes(':')) {
-                value = value + ':';
-            }
-            e.target.value = value;
-        });
-    }
-    
-    // Appliquer la validation aux champs d'heure existants
-    document.querySelectorAll('.timepicker').forEach(validateTimeInput);
-    
-    // Ajouter un horaire
-    document.getElementById('add-horaire').addEventListener('click', function() {
-        addHoraire();
-    });
-    
-    function addHoraire(jour = '', debut = '', fin = '') {
-        const container = document.getElementById('horaires-container');
-        const template = container.querySelector('.horaire-item').cloneNode(true);
-        
-        // Update field names and values
-        template.querySelectorAll('select, input').forEach(function(field) {
-            const name = field.name;
-            if (name) {
-                field.name = name.replace(/\[\d+\]/, '[' + horaireIndex + ']');
-                field.value = '';
-            }
-        });
-        
-        // Set values if provided
-        if (jour) template.querySelector('select').value = jour;
-        if (debut) template.querySelector('input[name*="heure_debut"]').value = debut;
-        if (fin) template.querySelector('input[name*="heure_fin"]').value = fin;
-        
-        // Appliquer la validation aux nouveaux champs
-        template.querySelectorAll('.timepicker').forEach(validateTimeInput);
-        
-        // Show remove button
-        template.querySelector('.remove-horaire').style.display = 'inline-block';
-        
-        container.appendChild(template);
-        horaireIndex++;
-        
-        updateButtons();
-    }
-    
-    // Copier un horaire
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.copy-horaire')) {
-            const item = e.target.closest('.horaire-item');
-            const jour = item.querySelector('select').value;
-            const debut = item.querySelector('input[name*="heure_debut"]').value;
-            const fin = item.querySelector('input[name*="heure_fin"]').value;
-            
-            if (jour && debut && fin) {
-                addHoraire(jour, debut, fin);
-            }
-        }
-        
-        if (e.target.closest('.remove-horaire')) {
-            e.target.closest('.horaire-item').remove();
-            updateButtons();
-        }
-    });
-    
-    function updateButtons() {
-        const items = document.querySelectorAll('.horaire-item');
-        items.forEach(function(item, index) {
-            const removeBtn = item.querySelector('.remove-horaire');
-            if (index === 0 && items.length === 1) {
-                removeBtn.style.display = 'none';
-            } else if (index > 0) {
-                removeBtn.style.display = 'inline-block';
-            }
-        });
-    }
-});
-</script>
+let horaireIndex = {{ $cours->horaires->count() }};
 
-<style>
-.horaire-item {
-    transition: all 0.3s ease;
+function addHoraire() {
+    const container = document.getElementById('horaires-container');
+    const template = `
+        <div class="horaire-item glass-card p-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Jour</label>
+                    <select name="horaires[${horaireIndex}][jour]" class="glass-input w-full" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="lundi">Lundi</option>
+                        <option value="mardi">Mardi</option>
+                        <option value="mercredi">Mercredi</option>
+                        <option value="jeudi">Jeudi</option>
+                        <option value="vendredi">Vendredi</option>
+                        <option value="samedi">Samedi</option>
+                        <option value="dimanche">Dimanche</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure début</label>
+                    <input type="time" name="horaires[${horaireIndex}][heure_debut]" class="glass-input w-full" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Heure fin</label>
+                    <input type="time" name="horaires[${horaireIndex}][heure_fin]" class="glass-input w-full" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Salle</label>
+                    <div class="flex gap-2">
+                        <input type="text" name="horaires[${horaireIndex}][salle]" class="glass-input w-full" placeholder="Dojo 1">
+                        <button type="button" onclick="removeHoraire(this)" class="glass-button bg-red-600/20 hover:bg-red-600/30 text-red-400">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', template);
+    horaireIndex++;
 }
-.horaire-item:hover {
-    background: rgba(255,255,255,0.08) !important;
-    transform: translateY(-1px);
+
+function removeHoraire(button) {
+    button.closest('.horaire-item').remove();
 }
-input.timepicker {
-    font-family: monospace;
-    letter-spacing: 0.1em;
-}
-</style>
+</script>
 @endsection

@@ -582,3 +582,4 @@
 <script src="{{ asset('js/theta-fix.js') }}"></script>
 </body>
 </html>
+    <link rel="stylesheet" href="{{ asset("css/theme-fixes.css") }}">
