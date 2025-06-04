@@ -42,7 +42,7 @@ class MembresController extends Controller
             }
             
             $membres = $query->orderBy('created_at', 'desc')->paginate(15);
-            $ecoles = Ecole::where('active', true)->orderBy('nom')->get();
+            $ecoles = Ecole::where('active', true)->orderBy('nom')->paginate(20);
             
             $stats = [
                 'total' => Membre::count(),
@@ -69,7 +69,7 @@ class MembresController extends Controller
 
     public function create()
     {
-        $ecoles = Ecole::where('active', true)->orderBy('nom')->get();
+        $ecoles = Ecole::where('active', true)->orderBy('nom')->paginate(20);
         return view('admin.membres.create', compact('ecoles'));
     }
 
@@ -116,7 +116,7 @@ class MembresController extends Controller
 
     public function edit(Membre $membre)
     {
-        $ecoles = Ecole::where('active', true)->orderBy('nom')->get();
+        $ecoles = Ecole::where('active', true)->orderBy('nom')->paginate(20);
         return view('admin.membres.edit', compact('membre', 'ecoles'));
     }
 

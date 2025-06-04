@@ -20,9 +20,6 @@ use App\Http\Controllers\Admin\AuthLogController;
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    // Redirection par défaut vers dashboard
-    Route::get('/', function() { return redirect()->route('admin.dashboard'); });
-    
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/stats/api', [DashboardController::class, 'apiStats'])->name('stats.api');
@@ -37,7 +34,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('presences', PresenceController::class)->except(['show']);
     
     // Actions spéciales Écoles
-    Route::patch('ecoles/{ecole}/toggle-status', [EcoleController::class, 'toggleStatus'])
+    Route::post('ecoles/{ecole}/toggle-status', [EcoleController::class, 'toggleStatus'])
         ->name('ecoles.toggle-status');
     
     // Actions spéciales Membres
@@ -98,6 +95,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/auth/{authLog}', [AuthLogController::class, 'show'])->name('auth.show');
     });
     
+    // Rapports et statistiques
+    Route::prefix('rapports')->name('rapports.')->group(function () {
+        Route::get('/', [DashboardController::class, 'rapportsIndex'])->name('index');
+        Route::get('/retention', [DashboardController::class, 'retentionReport'])->name('retention');
+        Route::get('/presences', [DashboardController::class, 'presencesReport'])->name('presences');
+        Route::get('/inscriptions', [DashboardController::class, 'inscriptionsReport'])->name('inscriptions');
+    });
+    
     // Exports
     Route::prefix('exports')->name('exports.')->group(function () {
         Route::get('membres', [MembresController::class, 'export'])->name('membres');
@@ -108,17 +113,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('inscriptions', [InscriptionCoursController::class, 'export'])->name('inscriptions');
     });
     
-    // Rapports et statistiques
-    Route::prefix('rapports')->name('rapports.')->group(function () {
-        Route::get('/retention', [DashboardController::class, 'retentionReport'])->name('retention');
-        Route::get('/presences', [DashboardController::class, 'presencesReport'])->name('presences');
-        Route::get('/inscriptions', [DashboardController::class, 'inscriptionsReport'])->name('inscriptions');
-    });
-    
     // Configuration système (pour superadmin uniquement)
     Route::middleware('role:superadmin')->prefix('config')->name('config.')->group(function () {
-    // Redirection par défaut vers dashboard
-    Route::get('/', function() { return redirect()->route('admin.dashboard'); });
         Route::get('/', function() {
             return view('admin.config.index');
         })->name('index');
@@ -127,8 +123,3 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         })->name('maintenance');
     });
 });
-
-// Module Cours
-Route::resource('cours', CoursController::class);
-Route::post('cours/{cours}/duplicate', [CoursController::class, 'duplicate'])->name('cours.duplicate');
-

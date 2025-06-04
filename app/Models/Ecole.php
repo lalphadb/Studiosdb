@@ -15,14 +15,14 @@ class Ecole extends Model
         'adresse',
         'ville',
         'province',
+        'code_postal',
         'telephone',
         'email', 
         'responsable',
-        'active'
+        'statut'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -64,7 +64,33 @@ class Ecole extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('active', true);
+        return $query->where('statut', 'active');
+    }
+
+    /**
+     * Accesseur pour l'adresse complète
+     */
+    public function getAdresseCompleteAttribute(): string
+    {
+        $parts = array_filter([
+            $this->adresse,
+            $this->ville,
+            $this->province,
+            $this->code_postal
+        ]);
+        
+        return implode(', ', $parts);
+    }
+
+    /**
+     * Vérifier si les informations sont complètes
+     */
+    public function getIsCompleteAttribute(): bool
+    {
+        return !empty($this->adresse) 
+            && !empty($this->telephone) 
+            && !empty($this->email)
+            && !empty($this->responsable);
     }
 
     /**
@@ -88,6 +114,6 @@ class Ecole extends Model
      */
     public function getNombreCoursActifsAttribute(): int
     {
-        return $this->cours()->where('statut', 'actif')->count();
+        return $this->cours()->where('actif', true)->count();
     }
 }

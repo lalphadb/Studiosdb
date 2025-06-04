@@ -174,54 +174,70 @@
                     </ul>
                 </div>
             </div>
-
-            <!-- Actions rapides -->
-            <div class="content-card" style="background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.5rem; transition: all 0.3s ease;">
-                <div class="content-card-header" style="margin-bottom: 1.5rem;">
-                    <h3 class="content-card-title" style="font-size: 1.25rem; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                        <i class="fas fa-bolt" style="color: #f59e0b;"></i> Actions Rapides
-                    </h3>
-                </div>
-                <div class="quick-actions" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                    <a href="{{ route('admin.ecoles.create') }}" class="action-btn" 
-                       style="background: rgba(23,162,184,0.1); border: 1px solid rgba(23,162,184,0.3); color: #17a2b8; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(23,162,184,0.3)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <i class="fas fa-plus-circle" style="font-size: 1.5rem;"></i>
-                        Nouvelle École
-                    </a>
-                    <a href="{{ route('admin.membres.create') }}" class="action-btn" 
-                       style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(245,158,11,0.3)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <i class="fas fa-user-plus" style="font-size: 1.5rem;"></i>
-                        Nouveau Membre
-                    </a>
-                    <a href="{{ route('admin.cours.create') }}" class="action-btn" 
-                       style="background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); color: #8b5cf6; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(139,92,246,0.3)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <i class="fas fa-calendar-plus" style="font-size: 1.5rem;"></i>
-                        Nouveau Cours
-                    </a>
-                    <a href="{{ route('admin.membres.index', ['approuve' => '0']) }}" class="action-btn" 
-                       style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
-                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.3)'"
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <i class="fas fa-user-check" style="font-size: 1.5rem;"></i>
-                        Approbations
-                        @if($tachesEnAttente['membres_a_approuver'] > 0)
-                        <span style="position: absolute; top: -0.5rem; right: -0.5rem; background: #ef4444; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; animation: pulse 2s infinite;">
-                            {{ $tachesEnAttente['membres_a_approuver'] }}
-                        </span>
-                        @endif
-                    </a>
-                </div>
-            </div>
-        </div>
+<!-- Actions rapides -->
+<div class="content-card" style="background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.5rem; transition: all 0.3s ease;">
+    <div class="content-card-header" style="margin-bottom: 1.5rem;">
+        <h3 class="content-card-title" style="font-size: 1.25rem; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <i class="fas fa-bolt" style="color: #f59e0b;"></i> Actions Rapides
+        </h3>
+    </div>
+    <div class="quick-actions" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+        <a href="{{ route('admin.ecoles.create') }}" class="action-btn" 
+           style="background: rgba(23,162,184,0.1); border: 1px solid rgba(23,162,184,0.3); color: #17a2b8; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(23,162,184,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-plus-circle" style="font-size: 1.5rem;"></i>
+            Nouvelle École
+        </a>
+        
+        <a href="{{ route('admin.membres.create') }}" class="action-btn" 
+           style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(245,158,11,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-user-plus" style="font-size: 1.5rem;"></i>
+            Nouveau Membre
+        </a>
+        
+        <a href="{{ route('admin.cours.create') }}" class="action-btn" 
+           style="background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); color: #8b5cf6; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(139,92,246,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-calendar-plus" style="font-size: 1.5rem;"></i>
+            Nouveau Cours
+        </a>
+        
+        <a href="{{ route('admin.membres.index', ['approuve' => '0']) }}" class="action-btn" 
+           style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(239,68,68,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-user-check" style="font-size: 1.5rem;"></i>
+            Approbations
+            @if($tachesEnAttente['membres_a_approuver'] > 0)
+            <span style="position: absolute; top: -0.5rem; right: -0.5rem; background: #ef4444; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; animation: pulse 2s infinite;">
+                {{ $tachesEnAttente['membres_a_approuver'] }}
+            </span>
+            @endif
+        </a>
+        
+        <!-- NOUVEAU BOUTON: Gérer les Écoles -->
+        <a href="{{ route('admin.ecoles.index') }}" class="action-btn" 
+           style="background: rgba(32,201,151,0.1); border: 1px solid rgba(32,201,151,0.3); color: #20c997; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(32,201,151,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-school" style="font-size: 1.5rem;"></i>
+            Gérer les Écoles
+        </a>
+        
+        <!-- Optionnel: Bouton pour voir les rapports -->
+        <a href="{{ route('admin.rapports.presences') }}" class="action-btn" 
+           style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); color: #3b82f6; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"
+           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(59,130,246,0.3)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
+            Rapports
+        </a>
     </div>
 </div>
-
 @push('scripts')
 <script>
 // Effet hover sur les icônes des stats

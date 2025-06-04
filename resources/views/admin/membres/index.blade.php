@@ -190,7 +190,7 @@
         </div>
 
         <!-- Pagination -->
-        @if($membres->hasPages())
+        @if($membres instanceof \Illuminate\Pagination\LengthAwarePaginator)
             <div class="mt-8">
                 {{ $membres->appends(request()->query())->links() }}
             </div>

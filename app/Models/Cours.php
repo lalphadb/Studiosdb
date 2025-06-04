@@ -63,4 +63,11 @@ class Cours extends Model
     {
         return $this->hasMany(Presence::class);
     }
+
+    // Relation avec les sessions de cours
+    public function sessions()
+    {
+        return $this->hasMany(CoursSession::class, 'cours_id');
+    }
+
 }

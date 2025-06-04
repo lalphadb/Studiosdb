@@ -1,173 +1,251 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des écoles')
+@section('title', 'Gestion des Écoles')
 
 @section('content')
-<div class="container-fluid px-4">
+<div class="container-fluid">
     <!-- En-tête -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0 text-white">Gestion des écoles</h1>
-            <p class="text-muted">{{ $ecoles->total() }} école(s) au total</p>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="h3 mb-0 text-white">
+                <i class="fas fa-school me-2"></i>Gestion des Écoles
+            </h1>
         </div>
-        <div>
-            <a href="{{ route('admin.ecoles.create') }}" class="btn btn-glass-ultimate">
-                <i class="fas fa-plus me-2"></i>Nouvelle école
+        <div class="col-md-4 text-end">
+            @if(auth()->user()->hasRole('superadmin'))
+            <a href="{{ route('admin.ecoles.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Nouvelle École
             </a>
+        @endif
         </div>
     </div>
 
-    <!-- Filtres -->
-    <div class="content-section-ultimate mb-4">
-        <form method="GET" action="{{ route('admin.ecoles.index') }}">
-            <div class="row align-items-end">
-                <div class="col-md-4 mb-3">
-                    <label for="search" class="form-label text-white">Rechercher</label>
-                    <input type="text" 
-                           class="form-control" 
-                           id="search" 
-                           name="search" 
-                           value="{{ request('search') }}"
-                           placeholder="Nom, ville, responsable...">
+    <!-- Cartes de statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card gradient-primary">
+                <div class="stat-icon">
+                    <i class="fas fa-school"></i>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="ville" class="form-label text-white">Ville</label>
-                    <input type="text" 
-                           class="form-control" 
-                           id="ville" 
-                           name="ville" 
-                           value="{{ request('ville') }}"
-                           placeholder="Filtrer par ville...">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="active" class="form-label text-white">Statut</label>
-                    <select class="form-control" id="active" name="active">
-                        <option value="">Toutes les écoles</option>
-                        <option value="1" {{ request('active') === '1' ? 'selected' : '' }}>Actives</option>
-                        <option value="0" {{ request('active') === '0' ? 'selected' : '' }}>Inactives</option>
-                    </select>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <button type="submit" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-search me-2"></i>Filtrer
-                    </button>
+                <div class="stat-content">
+                    <h3>{{ $stats['total'] }}</h3>
+                    <p>Total des écoles</p>
                 </div>
             </div>
-        </form>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card gradient-success">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ $stats['actives'] }}</h3>
+                    <p>Écoles actives</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card gradient-warning">
+                <div class="stat-icon">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ $stats['inactives'] }}</h3>
+                    <p>Écoles inactives</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card gradient-danger">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ $stats['sans_adresse'] }}</h3>
+                    <p>Sans adresse</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Liste des écoles -->
-    <div class="content-section-ultimate">
-        @if($ecoles->count() > 0)
+    <!-- Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    <!-- Tableau des écoles -->
+    <div class="glass-card">
+        <div class="card-header">
+            <h5 class="mb-0">Liste des écoles</h5>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-dark table-hover">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>École</th>
-                            <th>Localisation</th>
-                            <th>Contact</th>
-                            <th>Responsable</th>
+                            <th>Nom</th>
+                            <th>Ville</th>
+                            <th>Téléphone</th>
+                            <th>Email</th>
+                            
                             <th>Statut</th>
-                            <th>Membres</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center">Complet</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($ecoles as $ecole)
+                        @forelse($ecoles as $ecole)
                         <tr>
                             <td>
-                                <div>
-                                    <strong class="text-white">{{ $ecole->nom }}</strong>
-                                    @if($ecole->adresse)
-                                        <br><small class="text-muted">{{ $ecole->adresse }}</small>
-                                    @endif
+                                <a href="{{ route('admin.ecoles.show', $ecole) }}" class="text-decoration-none">
+                                    {{ $ecole->nom }}
+                                </a>
+                            </td>
+                            <td>{{ $ecole->ville }}</td>
+                            <td>{{ $ecole->telephone ?? '-' }}</td>
+                            <td>{{ $ecole->email ?? '-' }}</td>
+                            
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input toggle-status" 
+                                           type="checkbox" 
+                                           data-id="{{ $ecole->id }}"
+                                           {{ $ecole->statut === 'active' ? 'checked' : '' }}>
+                                    <label class="form-check-label">
+                                        <span class="badge bg-{{ $ecole->statut === 'active' ? 'success' : 'secondary' }}">
+                                            {{ $ecole->statut === 'active' ? 'Active' : 'Inactive' }}
+                                        </span>
+                                    </label>
                                 </div>
-                            </td>
-                            <td>
-                                <div class="text-white">
-                                    @if($ecole->ville)
-                                        <i class="fas fa-map-marker-alt me-1"></i>{{ $ecole->ville }}
-                                    @endif
-                                    @if($ecole->province)
-                                        <br><small class="text-muted">{{ $ecole->province }}</small>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-white">
-                                    @if($ecole->telephone)
-                                        <div><i class="fas fa-phone me-1"></i>{{ $ecole->telephone }}</div>
-                                    @endif
-                                    @if($ecole->email)
-                                        <div><i class="fas fa-envelope me-1"></i>{{ $ecole->email }}</div>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                <span class="text-white">{{ $ecole->responsable ?? 'Non assigné' }}</span>
-                            </td>
-                            <td>
-                                @if($ecole->active)
-                                    <span class="badge bg-success">Active</span>
-                                @else
-                                    <span class="badge bg-secondary">Inactive</span>
-                                @endif
-                            </td>
-                            <td>
-                                <span class="badge bg-info">{{ $ecole->membres_count ?? 0 }}</span>
                             </td>
                             <td class="text-center">
-                                <div class="btn-group" role="group">
+                                @if($ecole->is_complete)
+                                    <i class="fas fa-check-circle text-success"></i>
+                                @else
+                                    <i class="fas fa-exclamation-circle text-warning" 
+                                       data-bs-toggle="tooltip" 
+                                       title="Informations incomplètes"></i>
+                                @endif
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group">
                                     <a href="{{ route('admin.ecoles.show', $ecole) }}" 
-                                       class="btn btn-sm btn-outline-info" 
+                                       class="btn btn-sm btn-info" 
+                                       data-bs-toggle="tooltip" 
                                        title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="{{ route('admin.ecoles.edit', $ecole) }}" 
-                                       class="btn btn-sm btn-outline-warning" 
+                                       class="btn btn-sm btn-warning" 
+                                       data-bs-toggle="tooltip" 
                                        title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    @if(auth()->user()->role === 'superadmin')
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-{{ $ecole->active ? 'secondary' : 'success' }}" 
-                                            title="{{ $ecole->active ? 'Désactiver' : 'Activer' }}"
-                                            onclick="toggleStatus({{ $ecole->id }}, '{{ $ecole->nom }}', {{ $ecole->active ? 'false' : 'true' }})">
-                                        <i class="fas fa-{{ $ecole->active ? 'pause' : 'play' }}"></i>
-                                    </button>
+                                    @if(auth()->user()->hasRole('superadmin'))
+                                    <form action="{{ route('admin.ecoles.destroy', $ecole) }}" 
+                                          method="POST" 
+                                          class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-danger" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                     @endif
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <p class="mb-0 text-muted">Aucune école trouvée</p>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination corrigée -->
-            @if($ecoles->hasPages())
+            <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
-                <nav aria-label="Pagination des écoles">
-                    {{ $ecoles->appends(request()->query())->links('pagination::bootstrap-4') }}
-                </nav>
+                {{ $ecoles->links() }}
             </div>
-            @endif
-        @else
-            <div class="text-center py-5">
-                <i class="fas fa-school fs-1 text-muted mb-3"></i>
-                <h5 class="text-muted">Aucune école trouvée</h5>
-                <p class="text-muted">
-                    @if(request()->hasAny(['search', 'ville', 'active']))
-                        Aucune école ne correspond à vos critères de recherche.
-                    @else
-                        Commencez par ajouter votre première école.
-                    @endif
-                </p>
-                <a href="{{ route('admin.ecoles.create') }}" class="btn btn-glass-ultimate">
-                    <i class="fas fa-plus me-2"></i>Ajouter une école
-                </a>
-            </div>
-        @endif
+        </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Initialiser les tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Toggle statut
+    $('.toggle-status').on('change', function() {
+        const ecoleId = $(this).data('id');
+        const $switch = $(this);
+        const $label = $(this).siblings('label').find('.badge');
+        
+        $.ajax({
+            url: `/admin/ecoles/${ecoleId}/toggle-status`,
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (response.statut === 'active') {
+                        $label.removeClass('bg-secondary').addClass('bg-success').text('Active');
+                    } else {
+                        $label.removeClass('bg-success').addClass('bg-secondary').text('Inactive');
+                    }
+                }
+            },
+            error: function() {
+                // Remettre le switch à sa position précédente
+                $switch.prop('checked', !$switch.prop('checked'));
+                alert('Erreur lors du changement de statut');
+            }
+        });
+    });
+
+    // Confirmation de suppression
+    $('.delete-form').on('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        
+        Swal.fire({
+            title: 'Êtes-vous sûr?',
+            text: "Cette action est irréversible!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer!',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+</script>
+@endpush
 @endsection

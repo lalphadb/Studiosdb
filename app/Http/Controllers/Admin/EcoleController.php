@@ -9,45 +9,56 @@ use Illuminate\Support\Facades\Auth;
 
 class EcoleController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $user = Auth::user();
-        $query = Ecole::query();
-
-        // Restriction par rôle
-        if ($user->role !== 'superadmin') {
-            $query->where('id', $user->ecole_id);
+        $user = auth()->user();
+        
+        if ($user->hasRole('superadmin')) {
+            $ecoles = Ecole::orderBy('nom')->paginate(20);
+            $stats = [
+                'total' => Ecole::count(),
+                'actives' => Ecole::where('statut', 'active')->count(),
+                'inactives' => Ecole::where('statut', 'inactive')->count(),
+                'sans_adresse' => Ecole::whereNull('adresse')->count(),
+            ];
+        } else {
+            $ecoles = Ecole::where('id', $user->ecole_id)->paginate(1);
+            $stats = [
+                'total' => 1,
+                'actives' => $user->ecole && $user->ecole->statut === 'active' ? 1 : 0,
+                'inactives' => $user->ecole && $user->ecole->statut === 'inactive' ? 1 : 0,
+                'sans_adresse' => $user->ecole && is_null($user->ecole->adresse) ? 1 : 0,
+            ];
         }
-
-        // Recherche
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('nom', 'like', "%{$search}%")
-                  ->orWhere('ville', 'like', "%{$search}%");
-            });
-        }
-
-        $ecoles = $query->orderBy('nom')->paginate(12);
-
-        return view('admin.ecoles.index', compact('ecoles'));
+        
+        return view('admin.ecoles.index', compact('ecoles', 'stats'));
     }
 
     public function show(Ecole $ecole)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         
-        if ($user->role !== 'superadmin' && $user->ecole_id !== $ecole->id) {
-            abort(403);
+        // Vérifier les permissions
+        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+            abort(403, 'Accès non autorisé');
         }
-
-        return view('admin.ecoles.show', compact('ecole'));
+        
+        $ecole->load(['membres', 'cours']);
+        $stats = [
+            'membres_total' => $ecole->membres()->count(),
+            'membres_actifs' => $ecole->membres()->where('approuve', true)->count(),
+            'cours_total' => $ecole->cours()->count(),
+            'cours_actifs' => $ecole->cours()->where('actif', true)->count(),
+        ];
+        
+        return view('admin.ecoles.show', compact('ecole', 'stats'));
     }
 
     public function create()
     {
-        if (Auth::user()->role !== 'superadmin') {
-            abort(403);
+        // Seul le superadmin peut créer des écoles
+        if (!auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Seul le super administrateur peut créer des écoles');
         }
         
         return view('admin.ecoles.create');
@@ -55,8 +66,8 @@ class EcoleController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::user()->role !== 'superadmin') {
-            abort(403);
+        if (!auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Seul le super administrateur peut créer des écoles');
         }
 
         $validated = $request->validate([
@@ -64,9 +75,10 @@ class EcoleController extends Controller
             'ville' => 'required|max:100',
             'province' => 'required|max:20',
             'adresse' => 'nullable|max:255',
+            'code_postal' => 'nullable|max:10',
             'telephone' => 'nullable|max:50',
             'email' => 'nullable|email|max:255',
-            'responsable' => 'nullable|max:255',
+            'statut' => 'required|in:active,inactive',
         ]);
 
         $ecole = Ecole::create($validated);
@@ -77,21 +89,23 @@ class EcoleController extends Controller
 
     public function edit(Ecole $ecole)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         
-        if ($user->role !== 'superadmin' && $user->ecole_id !== $ecole->id) {
-            abort(403);
+        // Vérifier les permissions
+        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+            abort(403, 'Accès non autorisé');
         }
-
+        
         return view('admin.ecoles.edit', compact('ecole'));
     }
 
     public function update(Request $request, Ecole $ecole)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         
-        if ($user->role !== 'superadmin' && $user->ecole_id !== $ecole->id) {
-            abort(403);
+        // Vérifier les permissions
+        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+            abort(403, 'Accès non autorisé');
         }
 
         $validated = $request->validate([
@@ -99,37 +113,43 @@ class EcoleController extends Controller
             'ville' => 'required|max:100',
             'province' => 'required|max:20',
             'adresse' => 'nullable|max:255',
+            'code_postal' => 'nullable|max:10',
             'telephone' => 'nullable|max:50',
             'email' => 'nullable|email|max:255',
-            'responsable' => 'nullable|max:255',
+            'statut' => 'required|in:active,inactive',
         ]);
 
         $ecole->update($validated);
 
         return redirect()->route('admin.ecoles.show', $ecole)
-            ->with('success', 'École mise à jour !');
+            ->with('success', 'École mise à jour avec succès !');
     }
 
     public function destroy(Ecole $ecole)
     {
-        if (Auth::user()->role !== 'superadmin') {
-            abort(403);
+        // Seul le superadmin peut supprimer des écoles
+        if (!auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Seul le super administrateur peut supprimer des écoles');
         }
 
         $ecole->delete();
 
         return redirect()->route('admin.ecoles.index')
-            ->with('success', 'École supprimée !');
+            ->with('success', 'École supprimée avec succès !');
     }
 
     public function toggleStatus(Ecole $ecole)
     {
-        if (Auth::user()->role !== 'superadmin') {
-            abort(403);
+        if (!auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Seul le super administrateur peut modifier le statut');
         }
 
-        $ecole->update(['active' => !$ecole->active]);
+        $ecole->statut = $ecole->statut === 'active' ? 'inactive' : 'active';
+        $ecole->save();
 
-        return back()->with('success', 'Statut mis à jour !');
+        return response()->json([
+            'success' => true,
+            'statut' => $ecole->statut
+        ]);
     }
 }
