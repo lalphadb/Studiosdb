@@ -21,7 +21,12 @@ export default defineConfig({
         outDir: 'public/build',
         emptyOutDir: true,
         manifest: true,
-        sourcemap: false,
-        minify: 'esbuild',
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+                'app-css': 'resources/css/app.css',
+                'admin-css': 'resources/css/admin.css'
+            }
+        }
     }
 });
