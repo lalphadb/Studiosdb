@@ -17,19 +17,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->middleware('auth:sanctum')->name('api.')->group(function () {
     // Écoles API endpoints
     Route::apiResource('ecoles', App\Http\Controllers\Api\EcoleController::class);
-    
-    // Membres API endpoints  
+
+    // Membres API endpoints
     Route::apiResource('membres', App\Http\Controllers\Api\MembreController::class);
-    
+
     // Cours API endpoints
     Route::apiResource('cours', App\Http\Controllers\Api\CoursController::class);
-    
+
     // Présences API endpoints
     Route::apiResource('presences', App\Http\Controllers\Api\PresenceController::class);
-    
+
     // Sessions API endpoints
     Route::apiResource('sessions', App\Http\Controllers\Api\SessionController::class);
-    
+
     // Ceintures API endpoints
     Route::apiResource('ceintures', App\Http\Controllers\Api\CeintureController::class);
 });
@@ -40,7 +40,7 @@ Route::prefix('public')->name('api.public.')->group(function () {
     Route::get('ecoles', function () {
         return response()->json([
             'status' => 'success',
-            'message' => 'Public API endpoint for Studios Unis'
+            'message' => 'Public API endpoint for Studios Unis',
         ]);
     })->name('ecoles');
 });

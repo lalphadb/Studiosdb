@@ -10,28 +10,28 @@ return new class extends Migration
     {
         Schema::table('auth_logs', function (Blueprint $table) {
             // Vérifier et ajouter les colonnes manquantes
-            if (!Schema::hasColumn('auth_logs', 'user_id')) {
+            if (! Schema::hasColumn('auth_logs', 'user_id')) {
                 $table->foreignId('user_id')->nullable()->after('id')->constrained()->nullOnDelete();
             }
-            if (!Schema::hasColumn('auth_logs', 'action')) {
+            if (! Schema::hasColumn('auth_logs', 'action')) {
                 $table->string('action')->after('user_id');
             }
-            if (!Schema::hasColumn('auth_logs', 'ip_address')) {
+            if (! Schema::hasColumn('auth_logs', 'ip_address')) {
                 $table->string('ip_address', 45)->after('action');
             }
-            if (!Schema::hasColumn('auth_logs', 'user_agent')) {
+            if (! Schema::hasColumn('auth_logs', 'user_agent')) {
                 $table->text('user_agent')->after('ip_address');
             }
-            if (!Schema::hasColumn('auth_logs', 'url')) {
+            if (! Schema::hasColumn('auth_logs', 'url')) {
                 $table->text('url')->nullable()->after('user_agent');
             }
-            if (!Schema::hasColumn('auth_logs', 'method')) {
+            if (! Schema::hasColumn('auth_logs', 'method')) {
                 $table->string('method', 10)->nullable()->after('url');
             }
-            if (!Schema::hasColumn('auth_logs', 'additional_data')) {
+            if (! Schema::hasColumn('auth_logs', 'additional_data')) {
                 $table->json('additional_data')->nullable()->after('method');
             }
-            
+
             // Ajouter les index
             $table->index(['user_id', 'action']);
             $table->index('created_at');

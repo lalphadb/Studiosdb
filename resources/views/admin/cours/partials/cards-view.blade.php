@@ -141,29 +141,3 @@
     @endforelse
 </div>
 
-<style>
-.cours-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,212,255,0.3);
-}
-
-.horaires-grid {
-    display: grid;
-    gap: 0.5rem;
-}
-
-.horaire-item {
-    background: rgba(255,255,255,0.05);
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.875rem;
-}
-
-.horaire-item:hover {
-    background: rgba(255,255,255,0.08);
-}
-</style>

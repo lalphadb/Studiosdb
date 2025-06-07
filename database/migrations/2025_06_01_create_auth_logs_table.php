@@ -1,4 +1,5 @@
 <?php
+
 // database/migrations/2025_06_01_create_auth_logs_table.php
 
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamp('created_at');
-            
+
             $table->index(['email', 'created_at']);
             $table->index('action');
         });

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     public function index()
@@ -11,7 +9,7 @@ class HomeController extends Controller
         if (auth()->check()) {
             return redirect()->route('admin.dashboard');
         }
-        
+
         return redirect()->route('login');
     }
 }

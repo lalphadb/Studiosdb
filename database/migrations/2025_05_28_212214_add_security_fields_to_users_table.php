@@ -23,11 +23,11 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'last_login_at',
-                'last_login_ip', 
+                'last_login_ip',
                 'login_attempts',
                 'locked_until',
                 'theme_preference',
-                'language_preference'
+                'language_preference',
             ]);
         });
     }

@@ -2,6 +2,10 @@
 
 @section('title', 'Modifier le Membre')
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
     <div class="container mx-auto px-6 py-8">

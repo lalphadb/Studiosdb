@@ -1,11 +1,12 @@
 <?php
+
 // app/Services/AuthLogService.php
 
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AuthLogService
 {
@@ -35,7 +36,7 @@ class AuthLogService
             ->withProperties([
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'session_duration' => $this->calculateSessionDuration($user)
+                'session_duration' => $this->calculateSessionDuration($user),
             ])
             ->log('Déconnexion');
     }
@@ -49,7 +50,7 @@ class AuthLogService
             ->causedBy($user)
             ->withProperties([
                 'ip' => request()->ip(),
-                'user_agent' => request()->userAgent()
+                'user_agent' => request()->userAgent(),
             ])
             ->log('Changement de mot de passe');
     }
@@ -72,7 +73,7 @@ class AuthLogService
      */
     private function calculateSessionDuration(User $user): int
     {
-        if (!$user->last_login_at) {
+        if (! $user->last_login_at) {
             return 0;
         }
 
@@ -89,4 +90,3 @@ class AuthLogService
             ->delete();
     }
 }
-

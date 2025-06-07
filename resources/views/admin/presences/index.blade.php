@@ -3,6 +3,10 @@
 @section('title', 'Présences')
 @section('page-title', 'Gestion des Présences')
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <div class="flex justify-between items-center">

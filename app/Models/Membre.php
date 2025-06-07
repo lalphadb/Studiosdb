@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Membre extends Model
 {
@@ -23,14 +23,14 @@ class Membre extends Model
         'ville',
         'province',
         'code_postal',
-        'approuve'
+        'approuve',
     ];
 
     protected $casts = [
         'date_naissance' => 'date',
         'approuve' => 'boolean',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
     ];
 
     public function ecole()
@@ -46,13 +46,13 @@ class Membre extends Model
     public function ceintures()
     {
         return $this->belongsToMany(Ceinture::class, 'ceintures_membres')
-                    ->withPivot('date_obtention')
-                    ->withTimestamps();
+            ->withPivot('date_obtention')
+            ->withTimestamps();
     }
 
     public function getNomCompletAttribute()
     {
-        return $this->prenom . ' ' . $this->nom;
+        return $this->prenom.' '.$this->nom;
     }
 
     public function getAgeAttribute()

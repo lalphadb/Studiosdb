@@ -1,4 +1,5 @@
 <?php
+
 // app/Http/Controllers/Admin/CeintureController.php
 
 namespace App\Http\Controllers\Admin;
@@ -14,6 +15,7 @@ class CeintureController extends Controller
     public function index()
     {
         $ceintures = Ceinture::orderBy('ordre')->paginate(20);
+
         return view('admin.ceintures.index', compact('ceintures'));
     }
 
@@ -40,6 +42,7 @@ class CeintureController extends Controller
     public function show(Ceinture $ceinture)
     {
         $membres = $ceinture->membres()->paginate(20);
+
         return view('admin.ceintures.show', compact('ceinture', 'membres'));
     }
 

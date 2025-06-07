@@ -28,7 +28,7 @@ class Seminaire extends Model
     public function membres()
     {
         return $this->belongsToMany(Membre::class, 'membre_seminaire')
-                   ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function scopeActive($query)

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\ConsentType;
+use Illuminate\Database\Seeder;
 
 class ConsentTypeSeeder extends Seeder
 {
@@ -47,7 +47,7 @@ class ConsentTypeSeeder extends Seeder
                 'is_required' => false,
             ],
         ];
-        
+
         foreach ($types as $type) {
             ConsentType::updateOrCreate(['key' => $type['key']], $type);
         }

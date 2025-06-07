@@ -20,7 +20,7 @@ class CoursSession extends Model
         'visible',
         'date_limite_inscription',
         'couleur',
-        'active'
+        'active',
     ];
 
     protected $casts = [
@@ -29,7 +29,7 @@ class CoursSession extends Model
         'date_limite_inscription' => 'date',
         'inscriptions_actives' => 'boolean',
         'visible' => 'boolean',
-        'active' => 'boolean'
+        'active' => 'boolean',
     ];
 
     public function ecole()
@@ -61,10 +61,10 @@ class CoursSession extends Model
     // Obtenir le statut de la session
     public function getStatutAttribute()
     {
-        if (!$this->active) {
+        if (! $this->active) {
             return 'inactive';
         }
-        
+
         $now = now();
         if ($now->lt($this->date_debut)) {
             return 'à venir';
@@ -78,14 +78,14 @@ class CoursSession extends Model
     // Vérifier si les inscriptions sont ouvertes
     public function getInscriptionsOuvertesAttribute()
     {
-        if (!$this->inscriptions_actives || !$this->active) {
+        if (! $this->inscriptions_actives || ! $this->active) {
             return false;
         }
-        
+
         if ($this->date_limite_inscription) {
             return now()->lte($this->date_limite_inscription);
         }
-        
+
         return now()->lte($this->date_fin);
     }
 

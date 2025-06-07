@@ -2,6 +2,10 @@
 
 @section('title', 'Membres en Attente')
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="text-center py-5">

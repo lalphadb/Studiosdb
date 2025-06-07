@@ -2,6 +2,10 @@
 
 @section('title', 'Gestion des Écoles')
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <!-- En-tête -->

@@ -32,7 +32,7 @@ class AddProfilFieldsToUsersTable extends Migration
             $table->dropColumn([
                 'prenom', 'nom', 'date_naissance', 'sexe',
                 'telephone', 'numero_civique', 'nom_rue',
-                'ville', 'province', 'code_postal', 'ecole_id'
+                'ville', 'province', 'code_postal', 'ecole_id',
             ]);
         });
     }

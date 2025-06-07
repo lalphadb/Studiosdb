@@ -16,7 +16,7 @@ class InscriptionCours extends Model
         'cours_id',
         'date_inscription',
         'statut',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [

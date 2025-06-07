@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Ecole;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EcoleController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        
+
         if ($user->hasRole('superadmin')) {
             $ecoles = Ecole::orderBy('nom')->paginate(20);
             $stats = [
@@ -30,19 +29,19 @@ class EcoleController extends Controller
                 'sans_adresse' => $user->ecole && is_null($user->ecole->adresse) ? 1 : 0,
             ];
         }
-        
+
         return view('admin.ecoles.index', compact('ecoles', 'stats'));
     }
 
     public function show(Ecole $ecole)
     {
         $user = auth()->user();
-        
+
         // Vérifier les permissions
-        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+        if (! $user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
             abort(403, 'Accès non autorisé');
         }
-        
+
         $ecole->load(['membres', 'cours']);
         $stats = [
             'membres_total' => $ecole->membres()->count(),
@@ -50,23 +49,23 @@ class EcoleController extends Controller
             'cours_total' => $ecole->cours()->count(),
             'cours_actifs' => $ecole->cours()->where('actif', true)->count(),
         ];
-        
+
         return view('admin.ecoles.show', compact('ecole', 'stats'));
     }
 
     public function create()
     {
         // Seul le superadmin peut créer des écoles
-        if (!auth()->user()->hasRole('superadmin')) {
+        if (! auth()->user()->hasRole('superadmin')) {
             abort(403, 'Seul le super administrateur peut créer des écoles');
         }
-        
+
         return view('admin.ecoles.create');
     }
 
     public function store(Request $request)
     {
-        if (!auth()->user()->hasRole('superadmin')) {
+        if (! auth()->user()->hasRole('superadmin')) {
             abort(403, 'Seul le super administrateur peut créer des écoles');
         }
 
@@ -90,21 +89,21 @@ class EcoleController extends Controller
     public function edit(Ecole $ecole)
     {
         $user = auth()->user();
-        
+
         // Vérifier les permissions
-        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+        if (! $user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
             abort(403, 'Accès non autorisé');
         }
-        
+
         return view('admin.ecoles.edit', compact('ecole'));
     }
 
     public function update(Request $request, Ecole $ecole)
     {
         $user = auth()->user();
-        
+
         // Vérifier les permissions
-        if (!$user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
+        if (! $user->hasRole('superadmin') && $ecole->id !== $user->ecole_id) {
             abort(403, 'Accès non autorisé');
         }
 
@@ -128,7 +127,7 @@ class EcoleController extends Controller
     public function destroy(Ecole $ecole)
     {
         // Seul le superadmin peut supprimer des écoles
-        if (!auth()->user()->hasRole('superadmin')) {
+        if (! auth()->user()->hasRole('superadmin')) {
             abort(403, 'Seul le super administrateur peut supprimer des écoles');
         }
 
@@ -140,7 +139,7 @@ class EcoleController extends Controller
 
     public function toggleStatus(Ecole $ecole)
     {
-        if (!auth()->user()->hasRole('superadmin')) {
+        if (! auth()->user()->hasRole('superadmin')) {
             abort(403, 'Seul le super administrateur peut modifier le statut');
         }
 
@@ -149,7 +148,7 @@ class EcoleController extends Controller
 
         return response()->json([
             'success' => true,
-            'statut' => $ecole->statut
+            'statut' => $ecole->statut,
         ]);
     }
 }

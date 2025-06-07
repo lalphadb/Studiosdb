@@ -15,7 +15,7 @@ class DemandeInscription extends Model
     protected $fillable = [
         'nom',
         'prenom',
-        'email', 
+        'email',
         'telephone',
         'ecole_id',
         'message',

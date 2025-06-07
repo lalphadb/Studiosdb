@@ -15,7 +15,7 @@ class Session extends Model
         'date_fin',
         'places_max',
         'statut',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [

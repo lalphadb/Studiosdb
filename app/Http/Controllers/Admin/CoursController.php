@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cours;
-use App\Models\Ecole;
 use App\Models\CoursSession;
-use App\Models\CoursHoraire;
+use App\Models\Ecole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +32,9 @@ class CoursController extends Controller
         // Recherche
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -66,10 +65,10 @@ class CoursController extends Controller
      */
     public function create()
     {
-        $ecoles = Auth::user()->role === 'superadmin' 
+        $ecoles = Auth::user()->role === 'superadmin'
             ? Ecole::where('statut', 'active')->get()
             : Ecole::where('id', Auth::user()->ecole_id)->get();
-            
+
         $sessions = CoursSession::where('active', true)
             ->where('inscriptions_actives', true)
             ->get();
@@ -130,14 +129,15 @@ class CoursController extends Controller
             }
 
             DB::commit();
-            
+
             return redirect()->route('admin.cours.index')
                 ->with('success', 'Cours créé avec succès!');
-                
+
         } catch (\Exception $e) {
             DB::rollBack();
+
             return back()->withInput()
-                ->with('error', 'Erreur lors de la création du cours: ' . $e->getMessage());
+                ->with('error', 'Erreur lors de la création du cours: '.$e->getMessage());
         }
     }
 
@@ -147,15 +147,15 @@ class CoursController extends Controller
     public function show(Cours $cours)
     {
         $this->authorize('view', $cours);
-        
+
         $cours->load([
             'ecole',
             'session',
             'horaires',
             'inscriptions.membre',
-            'presences' => function($query) {
+            'presences' => function ($query) {
                 $query->latest()->limit(10);
-            }
+            },
         ]);
 
         $stats = [
@@ -176,13 +176,13 @@ class CoursController extends Controller
     public function edit(Cours $cours)
     {
         $this->authorize('update', $cours);
-        
-        $ecoles = Auth::user()->role === 'superadmin' 
+
+        $ecoles = Auth::user()->role === 'superadmin'
             ? Ecole::where('statut', 'active')->get()
             : Ecole::where('id', Auth::user()->ecole_id)->get();
-            
+
         $sessions = CoursSession::where('active', true)->get();
-        
+
         $cours->load('horaires');
 
         return view('admin.cours.edit', compact('cours', 'ecoles', 'sessions'));
@@ -194,7 +194,7 @@ class CoursController extends Controller
     public function update(Request $request, Cours $cours)
     {
         $this->authorize('update', $cours);
-        
+
         $validated = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -252,14 +252,15 @@ class CoursController extends Controller
             $cours->horaires()->whereNotIn('id', $horaireIds)->delete();
 
             DB::commit();
-            
+
             return redirect()->route('admin.cours.show', $cours)
                 ->with('success', 'Cours mis à jour avec succès!');
-                
+
         } catch (\Exception $e) {
             DB::rollBack();
+
             return back()->withInput()
-                ->with('error', 'Erreur lors de la mise à jour: ' . $e->getMessage());
+                ->with('error', 'Erreur lors de la mise à jour: '.$e->getMessage());
         }
     }
 
@@ -269,7 +270,7 @@ class CoursController extends Controller
     public function destroy(Cours $cours)
     {
         $this->authorize('delete', $cours);
-        
+
         try {
             // Vérifier s'il y a des inscriptions
             if ($cours->inscriptions()->count() > 0) {
@@ -277,12 +278,12 @@ class CoursController extends Controller
             }
 
             $cours->delete();
-            
+
             return redirect()->route('admin.cours.index')
                 ->with('success', 'Cours supprimé avec succès!');
-                
+
         } catch (\Exception $e) {
-            return back()->with('error', 'Erreur lors de la suppression: ' . $e->getMessage());
+            return back()->with('error', 'Erreur lors de la suppression: '.$e->getMessage());
         }
     }
 
@@ -292,11 +293,11 @@ class CoursController extends Controller
     public function duplicate(Cours $cours)
     {
         $this->authorize('create', Cours::class);
-        
+
         DB::beginTransaction();
         try {
             $newCours = $cours->replicate();
-            $newCours->nom = $cours->nom . ' (Copie)';
+            $newCours->nom = $cours->nom.' (Copie)';
             $newCours->actif = false;
             $newCours->save();
 
@@ -308,13 +309,14 @@ class CoursController extends Controller
             }
 
             DB::commit();
-            
+
             return redirect()->route('admin.cours.edit', $newCours)
                 ->with('success', 'Cours dupliqué avec succès! Veuillez modifier les informations.');
-                
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Erreur lors de la duplication: ' . $e->getMessage());
+
+            return back()->with('error', 'Erreur lors de la duplication: '.$e->getMessage());
         }
     }
 
@@ -325,8 +327,8 @@ class CoursController extends Controller
     {
         $totalPresences = $cours->presences()->count();
         $presencesEffectives = $cours->presences()->where('present', true)->count();
-        
-        return $totalPresences > 0 
+
+        return $totalPresences > 0
             ? round(($presencesEffectives / $totalPresences) * 100, 1)
             : 0;
     }

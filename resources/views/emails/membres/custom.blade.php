@@ -85,7 +85,7 @@
     <div class="container">
         <div class="header">
             <h1>Studios Unis</h1>
-            <p style="margin: 10px 0 0; opacity: 0.9;">École de Karaté</p>
+            <p >École de Karaté</p>
         </div>
         
         <div class="content">
@@ -94,7 +94,7 @@
             <div class="message">{{ $messageContent }}</div>
             
             @if(isset($actionUrl) && isset($actionText))
-            <div style="text-align: center; margin: 30px 0;">
+            <div >
                 <a href="{{ $actionUrl }}" class="button">{{ $actionText }}</a>
             </div>
             @endif

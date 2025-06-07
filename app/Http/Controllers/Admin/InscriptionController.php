@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cours;
-use App\Models\Membre;
-use App\Models\Inscription;
 use App\Models\Ecole;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Inscription;
+use App\Models\Membre;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class InscriptionCoursController extends Controller
 {
@@ -20,11 +19,11 @@ class InscriptionCoursController extends Controller
         // Filtres
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('membre', function($q) use ($search) {
+            $query->whereHas('membre', function ($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%")
-                  ->orWhere('prenom', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            })->orWhereHas('cours', function($q) use ($search) {
+                    ->orWhere('prenom', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })->orWhereHas('cours', function ($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%");
             });
         }
@@ -38,7 +37,7 @@ class InscriptionCoursController extends Controller
         }
 
         if ($request->filled('ecole_id')) {
-            $query->whereHas('cours', function($q) use ($request) {
+            $query->whereHas('cours', function ($q) use ($request) {
                 $q->where('ecole_id', $request->ecole_id);
             });
         }
@@ -76,11 +75,11 @@ class InscriptionCoursController extends Controller
         $validated = $request->validate([
             'membre_id' => 'required|exists:membres,id',
             'cours_id' => 'required|exists:cours,id',
-            'notes' => 'nullable|string|max:500'
+            'notes' => 'nullable|string|max:500',
         ]);
 
         $cours = Cours::findOrFail($request->cours_id);
-        
+
         // Vérifier si le membre est déjà inscrit
         $existingInscription = Inscription::where('membre_id', $request->membre_id)
             ->where('cours_id', $request->cours_id)
@@ -107,13 +106,13 @@ class InscriptionCoursController extends Controller
             'cours_id' => $request->cours_id,
             'statut' => $statut,
             'date_inscription' => now(),
-            'notes' => $request->notes
+            'notes' => $request->notes,
         ]);
 
         // TODO: Envoyer email de confirmation
 
-        $message = $statut === 'confirmee' 
-            ? 'Inscription confirmée avec succès!' 
+        $message = $statut === 'confirmee'
+            ? 'Inscription confirmée avec succès!'
             : 'Inscription ajoutée à la liste d\'attente.';
 
         return redirect()->route('admin.inscriptions.index')->with('success', $message);
@@ -122,7 +121,7 @@ class InscriptionCoursController extends Controller
     public function updateStatut(Inscription $inscription, Request $request)
     {
         $validated = $request->validate([
-            'statut' => 'required|in:confirmee,liste_attente,annulee'
+            'statut' => 'required|in:confirmee,liste_attente,annulee',
         ]);
 
         $ancienStatut = $inscription->statut;
@@ -160,7 +159,7 @@ class InscriptionCoursController extends Controller
     {
         $validated = $request->validate([
             'inscriptions' => 'required|array',
-            'action' => 'required|in:confirm,cancel,delete'
+            'action' => 'required|in:confirm,cancel,delete',
         ]);
 
         $inscriptions = Inscription::whereIn('id', $validated['inscriptions'])->get();
@@ -174,14 +173,14 @@ class InscriptionCoursController extends Controller
                 }
                 $message = 'Inscriptions confirmées avec succès!';
                 break;
-            
+
             case 'cancel':
                 foreach ($inscriptions as $inscription) {
                     $inscription->update(['statut' => 'annulee']);
                 }
                 $message = 'Inscriptions annulées avec succès!';
                 break;
-            
+
             case 'delete':
                 foreach ($inscriptions as $inscription) {
                     $inscription->delete();

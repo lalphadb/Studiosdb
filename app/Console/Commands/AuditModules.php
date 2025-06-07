@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\File;
 class AuditModules extends Command
 {
     protected $signature = 'studiosdb:audit';
+
     protected $description = 'Audite tous les modules Blade et détecte les incohérences de layout/couleur';
 
     public function handle()
     {
         $bladeFiles = File::allFiles(resource_path('views'));
 
-        $this->info("🧪 Audit visuel des fichiers Blade...");
+        $this->info('🧪 Audit visuel des fichiers Blade...');
         $count = 0;
 
         foreach ($bladeFiles as $file) {
@@ -28,13 +29,14 @@ class AuditModules extends Command
                 ? $themeMatches[1]
                 : '❌ Pas de thème trouvé';
 
-            $this->line("🗂️ " . $file->getFilename() . " → Layout : {$layout} | Thème : {$themeClass}");
+            $this->line('🗂️ '.$file->getFilename()." → Layout : {$layout} | Thème : {$themeClass}");
 
             $count++;
         }
 
         $this->info("✅ $count fichiers audités.");
-        $this->info("🎨 Assure-toi que tous utilisent le même layout et les mêmes classes de style.");
+        $this->info('🎨 Assure-toi que tous utilisent le même layout et les mêmes classes de style.');
+
         return 0;
     }
 }

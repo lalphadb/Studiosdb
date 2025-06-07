@@ -23,8 +23,8 @@ return new class extends Migration
     {
         Schema::table('cours_sessions', function (Blueprint $table) {
             $table->dropColumn([
-                'description', 'mois', 'inscriptions_actives', 
-                'visible', 'date_limite_inscription', 'couleur', 'active'
+                'description', 'mois', 'inscriptions_actives',
+                'visible', 'date_limite_inscription', 'couleur', 'active',
             ]);
         });
     }

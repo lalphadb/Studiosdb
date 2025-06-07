@@ -30,7 +30,7 @@ class MembreMail extends Mailable
     public function content(): Content
     {
         $view = $this->template ? "emails.membres.{$this->template}" : 'emails.membres.custom';
-        
+
         return new Content(
             view: $view,
             with: [

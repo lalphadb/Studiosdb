@@ -10,37 +10,37 @@ return new class extends Migration
     {
         Schema::table('ecoles', function (Blueprint $table) {
             // Ajouter adresse si elle n'existe pas
-            if (!Schema::hasColumn('ecoles', 'adresse')) {
+            if (! Schema::hasColumn('ecoles', 'adresse')) {
                 $table->string('adresse')->nullable();
             }
-            
+
             // Ajouter ville si elle n'existe pas
-            if (!Schema::hasColumn('ecoles', 'ville')) {
+            if (! Schema::hasColumn('ecoles', 'ville')) {
                 $table->string('ville')->nullable();
             }
-            
+
             // Ajouter province si elle n'existe pas
-            if (!Schema::hasColumn('ecoles', 'province')) {
+            if (! Schema::hasColumn('ecoles', 'province')) {
                 $table->string('province')->default('Québec')->nullable();
             }
-            
+
             // Ajouter code_postal si il n'existe pas
-            if (!Schema::hasColumn('ecoles', 'code_postal')) {
+            if (! Schema::hasColumn('ecoles', 'code_postal')) {
                 $table->string('code_postal', 10)->nullable();
             }
-            
+
             // Ajouter telephone si il n'existe pas
-            if (!Schema::hasColumn('ecoles', 'telephone')) {
+            if (! Schema::hasColumn('ecoles', 'telephone')) {
                 $table->string('telephone', 20)->nullable();
             }
-            
+
             // Ajouter email si il n'existe pas
-            if (!Schema::hasColumn('ecoles', 'email')) {
+            if (! Schema::hasColumn('ecoles', 'email')) {
                 $table->string('email')->nullable();
             }
-            
+
             // Ajouter statut si il n'existe pas
-            if (!Schema::hasColumn('ecoles', 'statut')) {
+            if (! Schema::hasColumn('ecoles', 'statut')) {
                 $table->enum('statut', ['active', 'inactive'])->default('active');
             }
         });
@@ -50,7 +50,7 @@ return new class extends Migration
     {
         Schema::table('ecoles', function (Blueprint $table) {
             $columns = ['adresse', 'ville', 'province', 'code_postal', 'telephone', 'email', 'statut'];
-            
+
             foreach ($columns as $column) {
                 if (Schema::hasColumn('ecoles', $column)) {
                     $table->dropColumn($column);

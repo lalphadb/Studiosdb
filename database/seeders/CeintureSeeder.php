@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Ceinture;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class CeintureSeeder extends Seeder
@@ -12,10 +12,10 @@ class CeintureSeeder extends Seeder
     {
         // Désactiver temporairement les contraintes de clés étrangères
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
+
         // Vider la table
         Ceinture::truncate();
-        
+
         // Réactiver les contraintes
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -48,7 +48,7 @@ class CeintureSeeder extends Seeder
             Ceinture::create($ceinture);
             $this->command->info("Ceinture créée : {$ceinture['nom']}");
         }
-        
-        $this->command->info('✅ ' . count($ceintures) . ' ceintures créées avec succès!');
+
+        $this->command->info('✅ '.count($ceintures).' ceintures créées avec succès!');
     }
 }

@@ -1,3 +1,425 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*!
+ * STUDIOSUNISDB - PUBLIC & AUTH STYLES
+ * Palette professionnelle: #162a44, #102d55, #667589, #8492a5
+ */
+
+:root {
+  --primary: #162a44;
+  --primary-dark: #102d55;
+  --secondary: #667589;
+  --secondary-light: #8492a5;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =================================================================
+   PAGE D'ACCUEIL
+   ================================================================= */
+.welcome-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.welcome-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.875rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* =================================================================
+   AUTHENTIFICATION
+   ================================================================= */
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.auth-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.auth-card {
+  background: rgba(22, 42, 68, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(102, 117, 137, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-logo {
+  margin-bottom: 1.5rem;
+}
+
+.auth-logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.auth-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+}
+
+/* =================================================================
+   FORMULAIRES
+   ================================================================= */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  color: white;
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(102, 117, 137, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-error {
+  color: #fca5a5;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: transparent;
+}
+
+.form-check-input:checked {
+  background: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.form-check-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  margin-bottom: 1.5rem;
+}
+
+.btn-auth {
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-auth::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 350ms ease-in-out;
+}
+
+.btn-auth:hover::before {
+  left: 100%;
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.auth-links {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-link {
+  color: var(--secondary-light) !important;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.25s ease;
+}
+
+.auth-link:hover {
+  color: white !important;
+}
+
+/* =================================================================
+   FOOTER AUTH
+   ================================================================= */
+.auth-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.auth-footer-links {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.auth-footer-links .auth-link {
+  color: var(--secondary-light) !important;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.auth-footer-links .auth-link:hover {
+  color: white !important;
+}
+
+.auth-footer-links .separator {
+  color: rgba(255,255,255,0.5);
+}
+
+.auth-footer-copyright {
+  color: rgba(255,255,255,0.5) !important;
+  font-size: 0.75rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.auth-footer-copyright small {
+  opacity: 0.8;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+.alert {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--success);
+  color: #34d399;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--danger);
+  color: #fca5a5;
+}
+
+.alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--info);
+  color: #93c5fd;
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 640px) {
+  .auth-container {
+    padding: 0.5rem;
+  }
+  
+  .auth-card {
+    padding: 1.5rem;
+  }
+  
+  .auth-title {
+    font-size: 1.5rem;
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+  }
+  
+  .welcome-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .auth-footer-links {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .auth-footer-links .separator {
+    display: none;
+  }
+}
+
+/* =================================================================
+   FOOTER AUTH - COULEURS FORCÉES
+   ================================================================= */
+.auth-footer * {
+  color: rgba(255,255,255,0.5) !important;
+}
+
+.auth-footer a {
+  color: #8492a5 !important;
+  text-decoration: none !important;
+  transition: color 0.25s ease !important;
+}
+
+.auth-footer a:hover {
+  color: white !important;
+}
+
+.auth-footer .separator {
+  color: rgba(255,255,255,0.5) !important;
+}
+
+.auth-footer p {
+  color: rgba(255,255,255,0.5) !important;
+}
+
+.auth-footer small {
+  color: rgba(255,255,255,0.4) !important;
+}

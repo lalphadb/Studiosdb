@@ -110,9 +110,9 @@ return [
     |
     */
 
-'from' => [
-    'address' => env('MAIL_FROM_ADDRESS', 'noreply@privateip.org'),
-    'name' => env('MAIL_FROM_NAME', 'StudiosUnisDB'),
-],
+    'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@privateip.org'),
+        'name' => env('MAIL_FROM_NAME', 'StudiosUnisDB'),
+    ],
 
 ];

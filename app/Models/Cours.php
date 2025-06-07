@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cours extends Model
 {
@@ -24,7 +24,7 @@ class Cours extends Model
         'capacite_max',
         'duree_minutes',
         'jours',
-        'actif'
+        'actif',
     ];
 
     protected $casts = [
@@ -55,8 +55,8 @@ class Cours extends Model
     public function membres(): BelongsToMany
     {
         return $this->belongsToMany(Membre::class, 'inscriptions_cours')
-                    ->withPivot('date_inscription', 'statut')
-                    ->withTimestamps();
+            ->withPivot('date_inscription', 'statut')
+            ->withTimestamps();
     }
 
     public function presences(): HasMany
@@ -69,5 +69,4 @@ class Cours extends Model
     {
         return $this->hasMany(CoursSession::class, 'cours_id');
     }
-
 }

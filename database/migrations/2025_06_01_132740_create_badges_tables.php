@@ -30,7 +30,7 @@ return new class extends Migration
             $table->timestamp('obtenu_le');
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             // Un membre ne peut avoir le même badge qu'une fois
             $table->unique(['membre_id', 'badge_id']);
         });

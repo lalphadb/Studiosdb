@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class CoursHoraire extends Model
 {
@@ -18,13 +18,13 @@ class CoursHoraire extends Model
         'heure_debut',
         'heure_fin',
         'salle',
-        'active'
+        'active',
     ];
 
     protected $casts = [
         'heure_debut' => 'datetime:H:i',
         'heure_fin' => 'datetime:H:i',
-        'active' => 'boolean'
+        'active' => 'boolean',
     ];
 
     // Relations

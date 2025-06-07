@@ -23,7 +23,7 @@ class MembreRequest extends FormRequest
                 'nullable',
                 'email',
                 'max:255',
-                Rule::unique('membres')->ignore($membreId)
+                Rule::unique('membres')->ignore($membreId),
             ],
             'ecole_id' => ['required', 'exists:ecoles,id'],
             'date_naissance' => ['nullable', 'date', 'before:today'],
@@ -34,7 +34,7 @@ class MembreRequest extends FormRequest
             'ville' => ['nullable', 'string', 'max:100'],
             'province' => ['nullable', 'string', 'max:50'],
             'code_postal' => ['nullable', 'string', 'max:10'],
-            'approuve' => ['boolean']
+            'approuve' => ['boolean'],
         ];
     }
 
@@ -42,14 +42,14 @@ class MembreRequest extends FormRequest
     {
         return [
             'nom.required' => 'Le nom est obligatoire',
-            'prenom.required' => 'Le prénom est obligatoire', 
+            'prenom.required' => 'Le prénom est obligatoire',
             'email.email' => 'Format d\'email invalide',
             'email.unique' => 'Cet email est déjà utilisé',
             'ecole_id.required' => 'L\'école est obligatoire',
             'ecole_id.exists' => 'École invalide',
             'date_naissance.date' => 'Date de naissance invalide',
             'date_naissance.before' => 'La date de naissance doit être antérieure à aujourd\'hui',
-            'sexe.in' => 'Sexe invalide (H ou F)'
+            'sexe.in' => 'Sexe invalide (H ou F)',
         ];
     }
 }

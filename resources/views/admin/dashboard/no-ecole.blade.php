@@ -1,35 +1,28 @@
 @extends('layouts.admin')
 
-@section('title', 'Tableau de bord')
-@section('page-title', 'Tableau de bord')
-@section('breadcrumb', 'Dashboard')
+@section('title', 'Aucune école assignée')
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/aurora-grey-theme.css') }}">
+@endpush
+
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="theta-card">
-                <div class="alert alert-warning">
-                    <h4 class="alert-heading">
-                        <i class="bi bi-exclamation-triangle"></i> Aucune école assignée
-                    </h4>
-                    <p>Votre compte n'est associé à aucune école. Veuillez contacter un administrateur.</p>
-                    <hr>
-                    <p class="mb-0">
-                        En attendant, vous pouvez :
-                    </p>
-                </div>
-                
-                <div class="mt-4">
-                    <a href="{{ route('admin.membres.index') }}" class="btn btn-primary">
-                        <i class="bi bi-people"></i> Voir tous les membres
-                    </a>
-                    <a href="{{ route('admin.cours.index') }}" class="btn btn-info ml-2">
-                        <i class="bi bi-calendar3"></i> Voir tous les cours
-                    </a>
-                </div>
-            </div>
+<div class="container-fluid px-4 py-6">
+    <div class="aurora-card text-center">
+        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-content">
+            <i class="fas fa-school text-4xl text-white/30"></i>
         </div>
+        
+        <h1 class="text-2xl font-bold text-white mb-4">Aucune école assignée</h1>
+        <p class="text-secondary mb-6">
+            Votre compte n'est pas encore associé à une école. 
+            Veuillez contacter l'administrateur pour être assigné à une école.
+        </p>
+        
+        <a href="{{ route('profile.edit') }}" class="btn-aurora">
+            Voir mon profil
+        </a>
     </div>
 </div>
 @endsection

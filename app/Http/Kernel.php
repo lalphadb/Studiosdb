@@ -1,5 +1,4 @@
 <?php
-// app/Http/Kernel.php
 
 namespace App\Http;
 
@@ -31,17 +30,19 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SecurityHeaders::class,
+            \App\Http\Middleware\ContentSecurityPolicy::class,
         ],
 
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ],
     ];
 
     /**
-     * Les middlewares de route
+     * Les middlewares de route (aliases)
      */
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -54,11 +55,14 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-         // ... autres middlewares
-        'log.auth' => \App\Http\Middleware\LogAuthentication::class,
-        // Middlewares personnalisés
+        
+        // Middlewares personnalisés StudiosUnisDB
+        'csp' => \App\Http\Middleware\ContentSecurityPolicy::class,
+        'security.headers' => \App\Http\Middleware\SecurityHeaders::class,
         'active' => \App\Http\Middleware\EnsureUserIsActive::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'log.auth' => \App\Http\Middleware\LogAuthentication::class,
         'debug.auth' => \App\Http\Middleware\DebugAuth::class,
+        'admin.redirect' => \App\Http\Middleware\AdminRedirect::class,
     ];
 }

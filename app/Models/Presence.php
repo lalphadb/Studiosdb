@@ -38,7 +38,7 @@ class Presence extends Model
     public function scopeCeMois($query)
     {
         return $query->whereMonth('date_presence', now()->month)
-                    ->whereYear('date_presence', now()->year);
+            ->whereYear('date_presence', now()->year);
     }
 
     public function scopePresents($query)

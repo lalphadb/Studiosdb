@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::table('membres', function (Blueprint $table) {
             $table->enum('niveau_ceinture', [
-                'blanche', 'jaune', 'orange', 'verte', 
-                'bleue', 'marron', 'noire'
+                'blanche', 'jaune', 'orange', 'verte',
+                'bleue', 'marron', 'noire',
             ])->default('blanche')->after('approuve');
-            
+
             $table->date('date_derniere_ceinture')->nullable()->after('niveau_ceinture');
         });
     }

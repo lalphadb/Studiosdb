@@ -129,19 +129,3 @@
     @endforeach
 </div>
 
-<style>
-.cours-schedule-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(0,212,255,0.2);
-    background: rgba(255,255,255,0.08) !important;
-}
-
-.cours-schedule-card .card-header h6 {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.cours-schedule-card .badge {
-    font-size: 0.75rem;
-}
-</style>

@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{ asset('css/studiosdb-glassmorphic-complete.css') }}">
 @endpush
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="main-content">
     <div class="container">
@@ -141,80 +145,4 @@ document.querySelector('select[name="cours_id"]').addEventListener('change', fun
 </script>
 @endpush
 
-<style>
-.form-label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.form-control, .form-select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 0.75rem;
-    border-radius: 10px;
-}
-
-.form-control:focus, .form-select:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: #20b9be;
-    color: white;
-    box-shadow: 0 0 0 0.2rem rgba(32, 185, 190, 0.25);
-}
-
-.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-select.form-control option {
-    background: #293237;
-    color: white;
-}
-
-select.form-control optgroup {
-    background: #1a1d21;
-    color: #20b9be;
-    font-weight: 600;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 10px;
-    font-weight: 500;
-}
-
-.btn-primary {
-    background: #20b9be;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #1a9da0;
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.alert-info {
-    color: #20b9be;
-}
-
-.invalid-feedback {
-    color: #f44336;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.is-invalid {
-    border-color: #f44336 !important;
-}
-</style>
 @endsection

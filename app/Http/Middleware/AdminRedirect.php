@@ -11,11 +11,11 @@ class AdminRedirect
     {
         if (auth()->check()) {
             // Si on accède à /admin sans route spécifique, rediriger vers dashboard
-            if ($request->is('admin') && !$request->is('admin/*')) {
+            if ($request->is('admin') && ! $request->is('admin/*')) {
                 return redirect()->route('admin.dashboard');
             }
         }
-        
+
         return $next($request);
     }
 }

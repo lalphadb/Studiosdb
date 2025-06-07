@@ -17,12 +17,12 @@ class Badge extends Model
         'points',
         'conditions',
         'couleur',
-        'actif'
+        'actif',
     ];
 
     protected $casts = [
         'conditions' => 'array',
-        'actif' => 'boolean'
+        'actif' => 'boolean',
     ];
 
     public function membres()
@@ -50,28 +50,28 @@ class Badge extends Model
     private function checkPresenceCondition(Membre $membre): bool
     {
         $conditions = $this->conditions;
-        
+
         if (isset($conditions['jours_consecutifs'])) {
             // Vérifier les présences consécutives
             $presencesConsecutives = $membre->presences()
                 ->orderBy('date', 'desc')
                 ->take($conditions['jours_consecutifs'])
                 ->count();
-                
+
             return $presencesConsecutives >= $conditions['jours_consecutifs'];
         }
-        
+
         return false;
     }
 
     private function checkProgressionCondition(Membre $membre): bool
     {
         $conditions = $this->conditions;
-        
+
         if (isset($conditions['ceinture_niveau'])) {
             return $membre->ceinture_actuelle >= $conditions['ceinture_niveau'];
         }
-        
+
         return false;
     }
 

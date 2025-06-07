@@ -19,27 +19,27 @@ return new class extends Migration
             $table->string('salle')->nullable();
             $table->boolean('actif')->default(true);
             $table->timestamps();
-            
+
             $table->index(['cours_id', 'jour_semaine']);
         });
-        
+
         // Ajouter le type de cours dans la table cours si pas présent
         Schema::table('cours', function (Blueprint $table) {
-            if (!Schema::hasColumn('cours', 'type_cours')) {
+            if (! Schema::hasColumn('cours', 'type_cours')) {
                 $table->enum('type_cours', ['regulier', 'parent_enfant', 'ceinture_avancee', 'competition', 'prive'])->default('regulier')->after('description');
             }
-            if (!Schema::hasColumn('cours', 'age_min')) {
+            if (! Schema::hasColumn('cours', 'age_min')) {
                 $table->integer('age_min')->nullable()->after('type_cours');
             }
-            if (!Schema::hasColumn('cours', 'age_max')) {
+            if (! Schema::hasColumn('cours', 'age_max')) {
                 $table->integer('age_max')->nullable()->after('age_min');
             }
-            if (!Schema::hasColumn('cours', 'ceinture_requise_id')) {
+            if (! Schema::hasColumn('cours', 'ceinture_requise_id')) {
                 $table->foreignId('ceinture_requise_id')->nullable()->constrained('ceintures')->after('age_max');
             }
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('cours_schedules');

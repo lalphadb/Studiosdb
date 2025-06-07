@@ -1,52 +1,58 @@
-<x-guest-layout>
+@extends('layouts.guest')
+
+@section('content')
+<div class="auth-card">
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; background: linear-gradient(135deg, #667589, #162a44); border-radius: 1rem; margin-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+            <span style="color: white; font-weight: bold; font-size: 1.25rem;">SU</span>
+        </div>
+        <h1 style="color: white; font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem;">Inscription</h1>
+        <p style="color: rgba(255,255,255,0.8);">Créer votre compte membre</p>
+    </div>
+    
     <form method="POST" action="{{ route('register') }}">
         @csrf
-
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        
+        <div class="form-group">
+            <label class="form-label">Nom complet</label>
+            <input type="text" name="name" value="{{ old('name') }}" required class="form-input">
+            @if($errors->has('name'))
+                <span class="form-error">{{ $errors->first('name') }}</span>
+            @endif
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" value="{{ old('email') }}" required class="form-input">
+            @if($errors->has('email'))
+                <span class="form-error">{{ $errors->first('email') }}</span>
+            @endif
         </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        
+        <div class="form-group">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" required class="form-input">
+            @if($errors->has('password'))
+                <span class="form-error">{{ $errors->first('password') }}</span>
+            @endif
         </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        
+        <div class="form-group">
+            <label class="form-label">Confirmer le mot de passe</label>
+            <input type="password" name="password_confirmation" required class="form-input">
         </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+        
+        <div class="form-actions">
+            <button type="submit" class="btn-auth">
+                Créer mon compte
+            </button>
+        </div>
+        
+        <div class="auth-links">
+            <a href="{{ route('login') }}" class="auth-link">
+                Déjà membre ? Se connecter
             </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</div>
+@endsection

@@ -4,38 +4,34 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Cours;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CoursPolicy
 {
-    use HandlesAuthorization;
-
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
-        return true;
+        return in_array($user->role, ['superadmin', 'admin']);
     }
 
-    public function view(User $user, Cours $cours)
+    public function view(User $user, Cours $cours): bool
     {
-        return $user->role === 'superadmin' || 
-               ($user->ecole_id && $user->ecole_id == $cours->ecole_id);
+        if ($user->role === 'superadmin') return true;
+        return $user->ecole_id === $cours->ecole_id;
     }
 
-    public function create(User $user)
+    public function create(User $user): bool
     {
-        return $user->role === 'superadmin' || 
-               ($user->role === 'admin' && $user->ecole_id);
+        return in_array($user->role, ['superadmin', 'admin']);
     }
 
-    public function update(User $user, Cours $cours)
+    public function update(User $user, Cours $cours): bool
     {
-        return $user->role === 'superadmin' || 
-               ($user->ecole_id && $user->ecole_id == $cours->ecole_id);
+        if ($user->role === 'superadmin') return true;
+        return $user->ecole_id === $cours->ecole_id;
     }
 
-    public function delete(User $user, Cours $cours)
+    public function delete(User $user, Cours $cours): bool
     {
-        return $user->role === 'superadmin' || 
-               ($user->ecole_id && $user->ecole_id == $cours->ecole_id);
+        if ($user->role === 'superadmin') return true;
+        return $user->ecole_id === $cours->ecole_id;
     }
 }

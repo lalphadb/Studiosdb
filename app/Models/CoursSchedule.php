@@ -12,7 +12,7 @@ class CoursSchedule extends Model
         'heure_debut',
         'heure_fin',
         'salle',
-        'capacite_max'
+        'capacite_max',
     ];
 
     public function cours()

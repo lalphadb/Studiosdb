@@ -14,14 +14,14 @@ class Ceinture extends Model
         'nom',
         'ordre',
         'couleur',
-        'niveau'
+        'niveau',
     ];
 
     protected $casts = [
         'niveau' => 'integer',
         'ordre' => 'integer',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
     ];
 
     /**
@@ -30,8 +30,8 @@ class Ceinture extends Model
     public function membres(): BelongsToMany
     {
         return $this->belongsToMany(Membre::class, 'ceintures_obtenues')
-                    ->withPivot('date_obtention')
-                    ->withTimestamps();
+            ->withPivot('date_obtention')
+            ->withTimestamps();
     }
 
     /**
@@ -58,12 +58,12 @@ class Ceinture extends Model
         $couleurs = [
             'Blanc' => '#FFFFFF',
             'Jaune' => '#FFD700',
-            'Orange' => '#FFA500', 
+            'Orange' => '#FFA500',
             'Violet' => '#8A2BE2',
             'Bleu' => '#0000FF',
             'Vert' => '#008000',
             'Brun' => '#8B4513',
-            'Noir' => '#000000'
+            'Noir' => '#000000',
         ];
 
         return $couleurs[$this->couleur] ?? '#6c757d';

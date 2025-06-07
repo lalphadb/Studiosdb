@@ -17,7 +17,7 @@ class BadgeSeeder extends Seeder
                 'type' => 'progression',
                 'points' => 100,
                 'conditions' => ['ceinture_niveau' => 1],
-                'couleur' => '#00d4ff'
+                'couleur' => '#00d4ff',
             ],
             [
                 'nom' => 'En Feu',
@@ -26,7 +26,7 @@ class BadgeSeeder extends Seeder
                 'type' => 'presence',
                 'points' => 500,
                 'conditions' => ['jours_consecutifs' => 30],
-                'couleur' => '#ff6b00'
+                'couleur' => '#ff6b00',
             ],
             [
                 'nom' => 'Étoile Montante',
@@ -35,7 +35,7 @@ class BadgeSeeder extends Seeder
                 'type' => 'progression',
                 'points' => 750,
                 'conditions' => ['ceintures_6mois' => 3],
-                'couleur' => '#ffaa00'
+                'couleur' => '#ffaa00',
             ],
             [
                 'nom' => 'Maître',
@@ -44,7 +44,7 @@ class BadgeSeeder extends Seeder
                 'type' => 'progression',
                 'points' => 2000,
                 'conditions' => ['ceinture_niveau' => 10],
-                'couleur' => '#ff0080'
+                'couleur' => '#ff0080',
             ],
             [
                 'nom' => 'Ambassadeur',
@@ -53,7 +53,7 @@ class BadgeSeeder extends Seeder
                 'type' => 'social',
                 'points' => 1000,
                 'conditions' => ['parrainages' => 5],
-                'couleur' => '#7928ca'
+                'couleur' => '#7928ca',
             ],
             [
                 'nom' => 'Perfectionniste',
@@ -62,8 +62,8 @@ class BadgeSeeder extends Seeder
                 'type' => 'presence',
                 'points' => 300,
                 'conditions' => ['presence_session' => 100],
-                'couleur' => '#00ff88'
-            ]
+                'couleur' => '#00ff88',
+            ],
         ];
 
         foreach ($badges as $badge) {

@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::table('cours', function (Blueprint $table) {
             // Ajouter ecole_id si elle n'existe pas
-            if (!Schema::hasColumn('cours', 'ecole_id')) {
+            if (! Schema::hasColumn('cours', 'ecole_id')) {
                 $table->foreignId('ecole_id')->nullable()->constrained('ecoles')->onDelete('cascade');
             }
-            
+
             // Ajouter session_id si elle n'existe pas
-            if (!Schema::hasColumn('cours', 'session_id')) {
+            if (! Schema::hasColumn('cours', 'session_id')) {
                 $table->foreignId('session_id')->nullable()->constrained('cours_sessions')->onDelete('set null');
             }
         });

@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{ asset('css/studiosdb-glassmorphic-complete.css') }}">
 @endpush
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="main-content">
     <div class="container">
@@ -281,55 +285,4 @@ function confirmBulkAction() {
 </script>
 @endpush
 
-<style>
-.avatar-circle {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #20b9be, #4caf50);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: white;
-    font-size: 14px;
-}
-
-.form-control, .form-select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-.form-control:focus, .form-select:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: #20b9be;
-    color: white;
-    box-shadow: 0 0 0 0.2rem rgba(32, 185, 190, 0.25);
-}
-
-.btn-primary {
-    background: #20b9be;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #1a9da0;
-}
-
-.btn-success {
-    background: #4caf50;
-    border: none;
-}
-
-.btn-warning {
-    background: #ff9800;
-    border: none;
-}
-
-.btn-danger {
-    background: #f44336;
-    border: none;
-}
-</style>
 @endsection

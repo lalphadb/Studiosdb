@@ -13,12 +13,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
-        
+
         // Vérifier si l'utilisateur a l'un des rôles requis
         foreach ($roles as $role) {
             if ($user->hasRole($role) || $user->role === $role) {

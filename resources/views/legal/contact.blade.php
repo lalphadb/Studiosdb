@@ -1,128 +1,74 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Contact')
 
 @section('content')
-@include('components.back-button')
-<div class="container contact-page">
-    <h1>Nous contacter</h1>
+<div class="aurora-card max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">Nous contacter</h1>
     
-    <div class="contact-grid">
-        <div class="contact-info">
-            <h2>Informations de contact</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-xl font-semibold text-white mb-4">Informations de contact</h2>
             
-            <div class="info-card">
-                <h3>Studios Unis - Siège social</h3>
-                <p><i class="fas fa-map-marker-alt"></i> 123 Rue Principale</p>
-                <p>Québec, QC G1A 1A1</p>
-                <p><i class="fas fa-phone"></i> (418) 555-0123</p>
-                <p><i class="fas fa-envelope"></i> info@studiosunis.com</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>Heures d'ouverture</h3>
-                <p>Lundi - Vendredi : 9h00 - 21h00</p>
-                <p>Samedi : 9h00 - 17h00</p>
-                <p>Dimanche : 10h00 - 16h00</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>Pour les questions sur vos données personnelles</h3>
-                <p>Envoyez un courriel à : donnees@studiosunis.com</p>
-                <p>Ou appelez : (418) 555-0124</p>
+            <div class="space-y-4">
+                <div class="p-4 bg-white/5 rounded-lg">
+                    <h3 class="font-semibold text-white mb-2">Studios Unis - Siège social</h3>
+                    <p class="text-gray-300"><i class="fas fa-map-marker-alt mr-2"></i>Québec, QC</p>
+                    <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>(418) 555-0123</p>
+                    <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i>info@studiosunis.com</p>
+                </div>
+                
+                <div class="p-4 bg-white/5 rounded-lg">
+                    <h3 class="font-semibold text-white mb-2">Protection des données</h3>
+                    <p class="text-gray-300"><i class="fas fa-shield-alt mr-2"></i>donnees@studiosunis.com</p>
+                    <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>(418) 555-0124</p>
+                </div>
             </div>
         </div>
         
-        <div class="contact-form">
-            <h2>Formulaire de contact</h2>
-            <form method="POST" action="#" class="glass-form">
+        <div>
+            <h2 class="text-xl font-semibold text-white mb-4">Formulaire de contact</h2>
+            <form class="space-y-4" action="{{ route('contact') }}" method="POST">
                 @csrf
-                <div class="form-group">
-                    <label for="name" class="form-label required">Nom complet</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Nom complet</label>
+                    <input type="text" name="name" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="email" class="form-label required">Courriel</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <input type="email" name="email" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="subject" class="form-label required">Sujet</label>
-                    <select id="subject" name="subject" class="form-select" required>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Sujet</label>
+                    <select name="subject" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white" required>
                         <option value="">Choisir un sujet</option>
                         <option value="general">Question générale</option>
-                        <option value="inscription">Inscription aux cours</option>
+                        <option value="inscription">Inscription</option>
                         <option value="donnees">Protection des données</option>
                         <option value="technique">Support technique</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label for="message" class="form-label required">Message</label>
-                    <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                    <textarea name="message" rows="4" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white" required></textarea>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Envoyer
+                <button type="submit" class="btn-aurora w-full">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Envoyer
                 </button>
             </form>
         </div>
     </div>
+    
+    <div class="mt-8 text-center">
+        <a href="{{ route('login') }}" class="btn-aurora">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Retour à la connexion
+        </a>
+    </div>
 </div>
-
-<style>
-.contact-page {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-}
-
-.contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-top: 2rem;
-}
-
-.info-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--blur-amount));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.info-card h3 {
-    color: var(--accent-primary);
-    margin-bottom: 1rem;
-}
-
-.info-card p {
-    margin-bottom: 0.5rem;
-    color: var(--text-secondary);
-}
-
-.info-card i {
-    color: var(--accent-primary);
-    margin-right: 0.5rem;
-    width: 20px;
-}
-
-.glass-form {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--blur-amount));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-}
-
-@media (max-width: 768px) {
-    .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-}
-</style>
 @endsection

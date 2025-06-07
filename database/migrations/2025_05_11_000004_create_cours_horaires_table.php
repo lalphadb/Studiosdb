@@ -18,11 +18,11 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
-            
+
             // Index pour optimiser les requêtes
             $table->index(['cours_id', 'jour']);
             $table->index(['jour', 'heure_debut']);
-            
+
             // Contrainte pour éviter les doublons
             $table->unique(['cours_id', 'jour', 'heure_debut', 'heure_fin'], 'unique_cours_horaire');
         });

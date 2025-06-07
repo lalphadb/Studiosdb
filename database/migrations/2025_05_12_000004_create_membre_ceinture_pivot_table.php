@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('grade_par')->nullable(); // Qui a accordé la ceinture
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['membre_id', 'ceinture_id']);
             $table->index(['membre_id', 'date_obtention']);
         });

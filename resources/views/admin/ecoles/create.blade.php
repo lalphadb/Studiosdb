@@ -2,6 +2,10 @@
 
 @section('title', 'Nouvelle École')
 
+@push("styles")
+<link rel="stylesheet" href="{{ asset("css/aurora-grey-theme.css") }}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">

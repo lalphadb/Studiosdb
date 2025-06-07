@@ -19,9 +19,9 @@ return new class extends Migration
             if (Schema::hasColumn('cours', 'frequence_semaine')) {
                 $table->dropColumn('frequence_semaine');
             }
-            
+
             // Ajouter le champ tarification libre
-            if (!Schema::hasColumn('cours', 'tarification_info')) {
+            if (! Schema::hasColumn('cours', 'tarification_info')) {
                 $table->text('tarification_info')->nullable()->after('places_max');
             }
         });

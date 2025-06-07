@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('tarification_info')->nullable();
             $table->boolean('actif')->default(true);
             $table->timestamps();
-            
+
             $table->index(['ecole_id', 'actif']);
             $table->index('professeur_id');
         });

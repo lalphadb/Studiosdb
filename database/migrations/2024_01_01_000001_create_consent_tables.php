@@ -30,7 +30,7 @@ return new class extends Migration
             $table->timestamp('granted_at')->nullable();
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();
-            
+
             // Index unique pour éviter les doublons
             $table->unique(['user_id', 'consent_type_id']);
         });

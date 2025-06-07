@@ -28,7 +28,7 @@ class EcoleRequest extends FormRequest
                 'string',
                 'min:2',
                 'max:255',
-                Rule::unique('ecoles', 'nom')->ignore($ecoleId)
+                Rule::unique('ecoles', 'nom')->ignore($ecoleId),
             ],
             'adresse' => 'nullable|string|max:255',
             'ville' => 'required|string|max:100',
@@ -37,16 +37,16 @@ class EcoleRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:50',
-                'regex:/^[\d\(\)\-\+\s\.]+$/'
+                'regex:/^[\d\(\)\-\+\s\.]+$/',
             ],
             'email' => [
                 'nullable',
                 'email',
                 'max:255',
-                Rule::unique('ecoles', 'email')->ignore($ecoleId)
+                Rule::unique('ecoles', 'email')->ignore($ecoleId),
             ],
             'responsable' => 'nullable|string|max:255',
-            'active' => 'boolean'
+            'active' => 'boolean',
         ];
     }
 
@@ -60,20 +60,20 @@ class EcoleRequest extends FormRequest
             'nom.min' => 'Le nom doit contenir au moins 2 caractères',
             'nom.max' => 'Le nom ne peut pas dépasser 255 caractères',
             'nom.unique' => 'Une école avec ce nom existe déjà',
-            
+
             'ville.required' => 'La ville est obligatoire',
             'ville.max' => 'La ville ne peut pas dépasser 100 caractères',
-            
+
             'province.required' => 'La province est obligatoire',
             'province.max' => 'La province ne peut pas dépasser 20 caractères',
-            
+
             'telephone.regex' => 'Le format du téléphone n\'est pas valide',
             'telephone.max' => 'Le téléphone ne peut pas dépasser 50 caractères',
-            
+
             'email.email' => 'L\'adresse email n\'est pas valide',
             'email.unique' => 'Cette adresse email est déjà utilisée',
             'email.max' => 'L\'email ne peut pas dépasser 255 caractères',
-            
+
             'responsable.max' => 'Le nom du responsable ne peut pas dépasser 255 caractères',
             'adresse.max' => 'L\'adresse ne peut pas dépasser 255 caractères',
         ];
@@ -92,7 +92,7 @@ class EcoleRequest extends FormRequest
             'telephone' => 'téléphone',
             'email' => 'adresse email',
             'responsable' => 'responsable',
-            'active' => 'statut'
+            'active' => 'statut',
         ];
     }
 }
